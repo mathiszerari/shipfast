@@ -19,6 +19,7 @@ node_modules/
 *.npm
 *.json
 *.pack
+*.old
 
 # Fichiers temporaires
 *.tmp

@@ -10,4 +10,8 @@ export class HeaderComponent {
   pathAuth() {
     window.location.href = '/auth';
   }
+
+  pathHome() {
+    window.location.href = '/home';
+  }
 }

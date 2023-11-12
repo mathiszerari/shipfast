@@ -14,9 +14,11 @@ node_modules/
 /coverage/
 /nx-report/
 
-# Fichiers de logs
+# Fichiers de format
 *.log
 *.npm
+*.json
+*.pack
 
 # Fichiers temporaires
 *.tmp

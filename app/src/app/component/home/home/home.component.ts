@@ -7,10 +7,7 @@ import { Component } from '@angular/core';
       <app-header></app-header>
     </div>
   `,
-  styles: [`
-    .home {
-      padding: 0 30rem;
-    }`]
+  styles: []
 })
 export class HomeComponent {
   

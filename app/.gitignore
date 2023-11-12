@@ -1,0 +1,34 @@
+# Node Modules
+node_modules/
+
+# Fichiers de configuration
+.angular-config.json
+.angular-cli.json
+.angular.json
+
+# Fichiers de compilation
+/dist/
+
+# Cache
+/.sass-cache/
+/coverage/
+/nx-report/
+
+# Fichiers de logs
+*.log
+*.npm
+
+# Fichiers temporaires
+*.tmp
+
+# Fichiers de configuration d'éditeur
+.vscode/
+.idea/
+
+# Fichiers de sauvegarde
+*~
+*.swp
+
+# Fichiers de dépendances
+package-lock.json
+yarn.lock

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.responses import JSONResponse
 from bson import json_util
@@ -8,6 +9,18 @@ app = FastAPI()
 # Connectez-vous à la base de données MongoDB
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = mongo_client["shipfast"]  # Changez cela par le nom réel de votre base de données
+
+origins = [
+    "http://localhost:4200",  # Ajoutez ici les origines autorisées
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("shutdown")
 def shutdown_event():

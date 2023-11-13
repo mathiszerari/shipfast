@@ -2,3 +2,7 @@ app/src/_redirects
 .DS_Store
 .gitignore
 app/.DS_Store
+
+*.pyc
+api/.env
+*.env

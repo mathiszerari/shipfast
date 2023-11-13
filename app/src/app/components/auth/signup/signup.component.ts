@@ -7,5 +7,8 @@ import { Component } from '@angular/core';
   ]
 })
 export class SignupComponent {
+  pathLogin() {
+    window.location.href = '/auth/login';
+  }
 
 }

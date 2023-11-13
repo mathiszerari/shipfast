@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
   ]
 })
 export class HeaderComponent {
-  pathAuth() {
-    window.location.href = '/auth';
+  pathLogin() {
+    window.location.href = '/auth/login';
   }
 
   pathHome() {

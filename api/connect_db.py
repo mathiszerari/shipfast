@@ -9,9 +9,10 @@ def connect_to_database():
 
     # Access the 'url' variable from the environment
     uri = os.getenv("url")
+    print(uri)
 
-    # Create a new client and connect to the server
-    client = MongoClient(uri, server_api=ServerApi('1'))
+    # Create a new client and connect to the server without specifying server_api or SSL
+    client = MongoClient(uri)
 
     # Send a ping to confirm a successful connection
     try:

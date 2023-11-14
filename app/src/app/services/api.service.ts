@@ -17,7 +17,7 @@ export class ApiService {
   }
 
   createUser(user: User): Observable<User> {
-    const url = `${this.apiUrl}/api/creatusers`;
+    const url = `${this.apiUrl}/api/createusers`;
     return this.http.post<User>(url, user);
   }
 }

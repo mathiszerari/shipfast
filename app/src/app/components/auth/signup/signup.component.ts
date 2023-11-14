@@ -20,7 +20,7 @@ export class SignupComponent {
       name: ['', [Validators.required]],
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['']  // Vous pouvez ajouter des validateurs ici si nécessaire
+      password: [''] 
     });
   }
 

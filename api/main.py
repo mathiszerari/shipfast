@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.responses import JSONResponse
@@ -7,6 +7,7 @@ from call import (
     signup as call_create_users,
     get_users as call_get_users,
     login,
+    oauth2_scheme,
 )
 from bson import json_util
 from pydantic import BaseModel
@@ -52,3 +53,11 @@ async def create_users_handler(user_create: ClassUserCreate):
 @app.post("/api/login")
 async def login_route(login_data: LoginData):
     return await login(login_data.username_or_email, login_data.password)
+
+# Route protégée qui nécessite l'authentification
+@app.get("/protected")
+async def protected_route(token: str = Depends(oauth2_scheme)):
+    """
+    Exemple de route protégée nécessitant un token d'accès.
+    """
+    return {"message": "Bienvenue dans la zone protégée !"}

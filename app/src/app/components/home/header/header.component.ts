@@ -13,8 +13,6 @@ export class HeaderComponent {
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    console.log('hey');
-    
     this.apiService.getUsers().subscribe(
       (data: any) => {
         this.users = data;

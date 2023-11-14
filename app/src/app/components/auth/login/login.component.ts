@@ -26,15 +26,23 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const formData: loginUser = this.loginForm.value;
       console.log(formData);
+      
       this.apiService.loginUser(formData).subscribe(
         (data) => {
           console.log(data);
+          // Convertir l'objet en chaîne JSON
+          const jsonData = JSON.stringify(data);
+  
+          // Stocker la chaîne JSON dans le Local Storage
+          localStorage.setItem('token', jsonData);
+          console.log(localStorage.getItem('token'));
+          window.location.href = '/profile';
         }
-      )
+      );
     } else {
-      console.log('the fromular is not valid');
+      console.log('the form is not valid');
     }
-  }
+  }  
 
   pathSignup() {
     window.location.href = '/auth/signup';

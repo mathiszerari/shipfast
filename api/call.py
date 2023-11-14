@@ -6,10 +6,10 @@ from fastapi.responses import JSONResponse
 from bson import json_util
 from pydantic import BaseModel
 from passlib.context import CryptContext
+import jwt
 
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = mongo_client["shipfast"]
-
 
 class ClassUserCreate(BaseModel):
     name: str
@@ -17,10 +17,21 @@ class ClassUserCreate(BaseModel):
     email: str
     password: str
 
-
 # Create an instance of CryptContext with appropriate configuration
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Clé secrète pour signer les tokens
+SECRET_KEY = "secretkey"
+
+# Algorithme de signature pour PyJWT
+ALGORITHM = "HS256"
+
+# Fonction pour créer un token
+def create_jwt_token(data: dict) -> str:
+    return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+
+# Fonction pour dépendance de l'authentification
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 async def get_users():
     users = await db.users.find().to_list(length=100)
@@ -78,6 +89,9 @@ async def login(username_or_email: str, password: str):
 
     if user is None or not pwd_context.verify(password, user["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    else:
-        print("réussite")
-    return {"token_type": "bearer", "access_token": username_or_email}
+    
+    # Création d'un token avec des données utilisateur
+    token_data = {"sub": username_or_email}
+    access_token = create_jwt_token(token_data)
+
+    return {"username": username_or_email, "access_token": access_token}

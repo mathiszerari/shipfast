@@ -27,15 +27,14 @@
         </button>
       </div>
 
-      <form class="mt-6">
+      <form [formGroup]="loginForm" class="mt-6">
         <div class="mb-4">
-          <input type="email" id="email" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Email address" required>
+          <input formControlName="username_or_email" type="username_or_email" id="username_or_email" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Email address" required>
         </div>
         <div class="mb-4">
-          <input type="password" id="password" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Password (optional)" required>
+          <input formControlName="password" type="password" id="password" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Password (optional)" required>
         </div>
-        <button type="submit" class="cursor-pointer w-full text-gray-950 bg-gray-200 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm py-2.5 text-center">Send Magic Link</button>
-        
+        <button (click)="onSubmit()" type="submit" class="cursor-pointer w-full text-gray-950 bg-gray-200 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm py-2.5 text-center">Send Magic Link</button>
       </form>
       <button (click)="pathSignup()" class="cursor-pointer group flex justify-center transition delay-150 duration-300 mt-10 w-full text-gray-400 bg-gray-950 border border-gray-800 focus:ring-4 focus:outline-none font-medium hover:text-gray-300 rounded-lg text-sm py-2.5 text-center">
         <span class="transform ml-1">Don't have an account? Sign up</span> 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from 'src/app/models/users';
+import { createUser } from 'src/app/models/users';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class SignupComponent {
 
   onSubmit() {
     if (this.signupForm.valid) {
-      const formData: User = this.signupForm.value;
+      const formData: createUser = this.signupForm.value;
       console.log(formData);
       this.apiService.createUser(formData).subscribe(
         (data) => {

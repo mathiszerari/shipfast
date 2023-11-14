@@ -1,11 +1,12 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.responses import JSONResponse
 from call import (
     ClassUserCreate,
-    create_users as call_create_users,
+    signup as call_create_users,
     get_users as call_get_users,
+    login,
 )
 from bson import json_util
 from pydantic import BaseModel
@@ -28,6 +29,11 @@ app.add_middleware(
 )
 
 
+class LoginData(BaseModel):
+    username_or_email: str
+    password: str
+
+
 @app.get("/api/getusers")
 async def get_users_handler():
     return await call_get_users()
@@ -41,3 +47,8 @@ async def create_users_handler(user_create: ClassUserCreate):
         user_create.email,
         user_create.password,
     )
+
+
+@app.post("/api/login")
+async def login_route(login_data: LoginData):
+    return await login(login_data.username_or_email, login_data.password)

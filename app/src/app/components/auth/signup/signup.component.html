@@ -75,24 +75,23 @@
           </button>
         </div>
   
-        <form class="mt-6">
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="mt-6">
           <div class="mb-4">
-            <input type="name" id="name" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Name" required>
+            <input formControlName="name" type="text" id="name" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Name" required>
           </div>
           <div class="mb-4">
-            <input type="username" id="username" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Username" required>
+            <input formControlName="username" type="username" id="username" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Username" required>
           </div>
           <div class="mb-4">
-            <input type="email" id="email" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Email address" required>
+            <input formControlName="email" type="email" id="email" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Email address" required>
           </div>
           <div class="mb-4">
-            <input type="password" id="password" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Password (optional)" required>
+            <input formControlName="password" type="password" id="password" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Password (optional)" required>
           </div>
           <button type="submit" class="cursor-pointer w-full text-gray-950 bg-gray-200 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm py-2.5 text-center">Create account</button>
           <!-- <div class="mt-4 h-10 w-3/5 mx-auto">
             <span class="text-center text-xs text-gray-500">By continuing you agree to our <span class="text-center text-xs text-gray-400 mx-auto">Terms of Service</span></span>
           </div> -->
-          
         </form>
         <button (click)="pathLogin()" class="cursor-pointer group flex justify-center transition delay-150 duration-300 mt-10 w-full text-gray-400 bg-gray-950 border border-gray-800 focus:ring-4 focus:outline-none font-medium hover:text-gray-300 rounded-lg text-sm py-2.5 text-center">
           <span class="transform ml-1">I already have an account</span> 

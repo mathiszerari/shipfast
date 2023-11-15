@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { createUser, loginUser } from '../models/users';
+import { AuthCreateUser } from '../models/create-user.model';
+import { AuthReceiveLoginUser, AuthSendLoginUser } from '../models/login-user.model';
+import { UserProfile } from '../models/user-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,23 +13,23 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<createUser[]> {
+  getUsers(): Observable<AuthCreateUser[]> {
     const url = `${this.apiUrl}/api/getusers`;
-    return this.http.get<createUser[]>(url);
+    return this.http.get<AuthCreateUser[]>(url);
   }
 
-  createUser(user: createUser): Observable<createUser> {
+  createUser(user: AuthCreateUser): Observable<AuthCreateUser> {
     const url = `${this.apiUrl}/api/createusers`;
-    return this.http.post<createUser>(url, user);
+    return this.http.post<AuthCreateUser>(url, user);
   }
 
-  loginUser(user: any): Observable<any> {
+  loginUser(user: AuthSendLoginUser): Observable<AuthReceiveLoginUser> {
     const url = `${this.apiUrl}/api/login`;
-    return this.http.post<any>(url, user);
+    return this.http.post<AuthReceiveLoginUser>(url, user);
   }
 
-  getUserInfo(usernameOrEmail: string): Observable<any> {
-    const url = `${this.apiUrl}/api/get_user_info?username_or_email=${usernameOrEmail}`;
-    return this.http.get<any>(url);
-  }
+  getUserInfo(usernameOrEmail: string): Observable<UserProfile> {
+    const url = `${this.apiUrl}/api/get_user_info`;
+    return this.http.post<UserProfile>(url, { username_or_email: usernameOrEmail });
+  }  
 }

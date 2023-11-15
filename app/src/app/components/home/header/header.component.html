@@ -1,7 +1,9 @@
 <div class="flex justify-around">
   <div class="px-8 my-4 cursor-pointer">
     <!-- Put here your logo -->
-    <img (click)="pathHome()" src="../../../../assets/newlogo.png" alt="Profile Photo" class="w-10 h-10">
+    <a href="home">
+      <img src="../../../../assets/newlogo.png" alt="Profile Photo" class="w-10 h-10">
+    </a>
   </div>
   
   <div class="flex align-middle my-6">
@@ -23,8 +25,10 @@
   </div>
 
   <div *ngIf="!connected" class="flex mt-3.5">
-    <button (click)="pathLogin()" class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
-      Log in
+    <button class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
+      <a href="auth/login">
+        Log in
+      </a>
     </button>
     
     <button class="h-10 transition delay-150 duration-300 text-sm font-medium bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">

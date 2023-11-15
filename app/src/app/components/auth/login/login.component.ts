@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { loginUser } from 'src/app/models/users';
 import { ApiService } from 'src/app/services/auth.service';
+import { AuthReceiveLoginUser } from 'src/app/models/login-user.model';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +10,7 @@ import { ApiService } from 'src/app/services/auth.service';
   styles: [
   ]
 })
+
 export class LoginComponent {
   loginForm: FormGroup;
   username_or_email: string = ""
@@ -18,12 +19,11 @@ export class LoginComponent {
   email: string = ""
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private apiService: ApiService,
-    private router: Router
   ) {
-    this.loginForm = this.fb.group({
-      username_or_email: ['', [Validators.required]],
+    this.loginForm = this.formBuilder.group({
+      usernameOrEmail: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
   }
@@ -31,22 +31,33 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-      this.apiService.loginUser(formData).subscribe(
-        (data) => {
-          console.log(data);
-          localStorage.clear();
-          localStorage.setItem('username_or_email', data.username_or_email);
-          this.username_or_email = data.username_or_email
-          localStorage.setItem('token', data.access_token);
-          console.log(localStorage.getItem('username_or_email'));
-          console.log(localStorage.getItem('token'));
-          this.getUserInfo();
-          this.navigateToProfile();
-        }
-      );
+      this.apiService.loginUser(formData).subscribe((data: AuthReceiveLoginUser) => {
+        localStorage.clear();
+        localStorage.setItem('username_or_email', data.username_or_email);
+        this.username_or_email = data.username_or_email;
+        localStorage.setItem('token', data.access_token);
+        this.getUserInfo();
+        this.navigateToProfile();
+      });
     } else {
-      console.log('the form is not valid');
+      console.log('The form is not valid');
     }
+  }
+
+  getUserInfo() {
+    this.apiService.getUserInfo(this.username_or_email).subscribe(
+      (data: any) => {
+        this.name = data.name;
+        this.username = data.username;
+        this.email = data.email;
+        localStorage.setItem('name', this.name);
+        localStorage.setItem('username', this.username);
+        localStorage.setItem('email', this.email);
+      },
+      (error) => {
+        console.error('Error fetching user:', error);
+      }
+    );
   }
 
   pathSignup() {
@@ -56,25 +67,6 @@ export class LoginComponent {
   navigateToProfile(): void {
     setTimeout(() => {
       window.location.href = this.username;
-    }, 200);
-  }
-
-  getUserInfo() {
-    this.apiService.getUserInfo(this.username_or_email).subscribe(
-      (data: any) => {
-        console.log(data);
-        this.name = data.name
-        localStorage.setItem('name', data.name);
-        this.username = data.username
-        localStorage.setItem('username', data.username);
-        this.email = data.email
-        localStorage.setItem('email', data.email);
-        console.log(data);
-        console.log('salut');
-      },
-      (error) => {
-        console.error('Error fetching user:', error);
-      }
-    );
+    }, 100);
   }
 }

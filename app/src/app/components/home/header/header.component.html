@@ -23,7 +23,7 @@
   </div>
   
   <div class="flex mt-3.5">
-    <div class="flex">
+    <div *ngIf="!connected" class="flex">
       <button (click)="pathLogin()" class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
         Log in
       </button>
@@ -31,6 +31,11 @@
       <button class="h-10 transition delay-150 duration-300 text-sm font-medium bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
         Suscribe
       </button>
+    </div>
+    <div (click)="pathProfile()" *ngIf="connected" class="cursor-pointer">
+      <!-- Utilisez la directive [innerHTML] pour afficher la chaîne SVG -->
+      <img [src]="pp + name"
+      alt="avatar" alt="Profile Picture" class="w-10 h-10 rounded-full">
     </div>
   </div>
 </div>

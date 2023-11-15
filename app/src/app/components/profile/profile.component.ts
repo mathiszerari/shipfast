@@ -8,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class ProfileComponent {
 
+  logout() {
+    localStorage.clear();
+    window.location.href = '/auth/login';
+  }
+
 }

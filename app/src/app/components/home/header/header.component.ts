@@ -8,9 +8,14 @@ import { ApiService } from 'src/app/services/api.service';
   ]
 })
 export class HeaderComponent {
-  users: any;
+  users: any
+  name: string = ""
+  pp: string = "https://api.dicebear.com/7.x/thumbs/svg?seed="
+  connected: boolean = false;
 
-  constructor(private apiService: ApiService) { }
+
+  constructor(
+    private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.apiService.getUsers().subscribe(
@@ -22,6 +27,15 @@ export class HeaderComponent {
         console.error('Error fetching users:', error);
       }
     );
+  
+    const storedName = localStorage.getItem('name');
+    console.log(storedName);
+    
+    if (storedName !== null) {
+      this.connected = true;
+      this.name = storedName;
+      console.log(this.connected);
+    }
   }
 
   pathLogin() {
@@ -30,5 +44,9 @@ export class HeaderComponent {
 
   pathHome() {
     window.location.href = '/home';
+  }
+
+  pathProfile() {
+    window.location.href = '/profile';
   }
 }

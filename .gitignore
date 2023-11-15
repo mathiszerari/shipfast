@@ -6,3 +6,4 @@ app/.DS_Store
 *.pyc
 api/.env
 *.env
+*.jpg

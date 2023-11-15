@@ -24,17 +24,14 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const formData: loginUser = this.loginForm.value;
-      console.log(formData);
-      
+      const formData = this.loginForm.value;
       this.apiService.loginUser(formData).subscribe(
         (data) => {
-          console.log(data);
-          // Convertir l'objet en chaîne JSON
-          const jsonData = JSON.stringify(data);
-  
-          // Stocker la chaîne JSON dans le Local Storage
-          localStorage.setItem('token', jsonData);
+          // Clear all items in the local storage
+          localStorage.clear();
+          localStorage.setItem('name', data.username);
+          localStorage.setItem('token', data.access_token);
+          console.log(localStorage.getItem('name'));
           console.log(localStorage.getItem('token'));
           window.location.href = '/profile';
         }

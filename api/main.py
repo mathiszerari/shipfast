@@ -55,6 +55,11 @@ async def login_route(login_data: LoginData):
 async def protected_route(token: str = Depends(oauth2_scheme)):
     return {"message": "Bienvenue dans la zone protégée !"}
 
-@app.get("/api/get_user_info")
-async def get_user_info_route(username_or_email: str = Query(..., title="Username or Email")):
+@app.post("/api/get_user_info")
+async def get_user_info_route(data: dict):
+    username_or_email = data.get("username_or_email")
+
+    if not username_or_email:
+        raise HTTPException(status_code=400, detail="Le champ 'username_or_email' est requis")
+
     return await user_manager.get_user_info(username_or_email)

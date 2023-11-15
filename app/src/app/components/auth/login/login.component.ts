@@ -54,9 +54,7 @@ export class LoginComponent {
   }
 
   navigateToProfile(): void {
-    setTimeout(() => {
-      window.location.href = this.username;
-    }, 200);
+    window.location.href = this.username;
   }
 
   getUserInfo() {

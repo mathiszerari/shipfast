@@ -1,3 +1,4 @@
+import datetime
 import json
 from fastapi.security import OAuth2PasswordBearer
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -26,8 +27,10 @@ SECRET_KEY = "secretkey"
 # Algorithme de signature pour PyJWT
 ALGORITHM = "HS256"
 
-# Fonction pour créer un token
-def create_jwt_token(data: dict) -> str:
+# Fonction pour créer un token avec une expiration
+def create_jwt_token(data: dict, expires_delta: datetime.timedelta) -> str:
+    expire = datetime.datetime.utcnow() + expires_delta
+    data.update({"exp": expire})
     return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
 # Fonction pour dépendance de l'authentification
@@ -90,8 +93,9 @@ async def login(username_or_email: str, password: str):
     if user is None or not pwd_context.verify(password, user["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    # Création d'un token avec des données utilisateur
+   # Création d'un token avec des données utilisateur
     token_data = {"sub": username_or_email}
-    access_token = create_jwt_token(token_data)
+    expires = datetime.timedelta(minutes=1)  # 1 minute d'expiration
+    access_token = create_jwt_token(token_data, expires)
 
     return {"username": username_or_email, "access_token": access_token}

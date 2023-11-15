@@ -1,4 +1,3 @@
-// authentication.service.ts
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -10,7 +9,6 @@ export class AuthenticationService {
   }
 
   isAuthenticated(): boolean {
-    // Vérifiez ici si le token est présent et valide
     return !!this.getToken();
   }
 }

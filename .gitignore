@@ -7,3 +7,4 @@ app/.DS_Store
 api/.env
 *.env
 *.jpg
+_redirects

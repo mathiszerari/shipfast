@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 import { HomeComponent } from './components/home/home/home.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
-import { AuthGuard } from './guard/auth.guard';
+import { ProfileGuard } from './guard/profile.guard';
 import { LoginComponent } from './components/auth/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { NoAuthGuard } from './guard/no-auth.guard';
 
 const routes: Routes = [
   {
@@ -14,14 +15,14 @@ const routes: Routes = [
   {
     path: 'auth',
     children: [
-      { path: 'login', component: LoginComponent },
-      { path: 'signup', component: SignupComponent },
+      { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+      { path: 'signup', component: SignupComponent, canActivate: [NoAuthGuard] },
     ]
   },
   {
     path: ':username',
     component: ProfileComponent,
-    canActivate: [AuthGuard],
+    canActivate: [ProfileGuard],
   },
   {
     path: '**',

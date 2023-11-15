@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ApiService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -8,6 +6,7 @@ import { ApiService } from 'src/app/services/auth.service';
   styles: [
   ]
 })
+  
 export class HeaderComponent {
   user: any
   username_or_email: string = localStorage.getItem('username') || '';
@@ -17,10 +16,7 @@ export class HeaderComponent {
   pp: string = "https://api.dicebear.com/7.x/thumbs/svg?seed="
   connected: boolean = false;
 
-
-  constructor(
-    private apiService: ApiService,
-    private router: Router) { }
+  constructor() { }
 
   ngOnInit(): void {
     console.log(localStorage);
@@ -28,14 +24,6 @@ export class HeaderComponent {
     if (this.username != '') {
       this.connected = true;
     }
-  }
-
-  pathLogin() {
-    window.location.href = '/auth/login';
-  }
-
-  pathHome() {
-    window.location.href = '/home';
   }
 
   navigateToProfile(): void {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { receiveLoginUser } from 'src/app/models/users';
 import { ApiService } from 'src/app/services/auth.service';
+import { AuthReceiveLoginUser } from 'src/app/models/login-user.model';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +32,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
       this.apiService.loginUser(formData).subscribe(
-        (data: receiveLoginUser) => {
+        (data: AuthReceiveLoginUser) => {
           console.log(data);
           localStorage.clear();
           localStorage.setItem('username_or_email', data.username_or_email);
@@ -54,7 +54,9 @@ export class LoginComponent {
   }
 
   navigateToProfile(): void {
-    window.location.href = this.username;
+    setTimeout(() => {
+      window.location.href = this.username;
+    }, 100);
   }
 
   getUserInfo() {

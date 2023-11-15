@@ -65,6 +65,9 @@
             <input formControlName="password" type="password" id="password" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Password (optional)" required>
           </div>
           <button type="submit" class="cursor-pointer w-full text-gray-950 bg-gray-200 focus:ring-4 focus:out border-10 w-478line-none font-medium rounded-lg text-sm py-2.5 text-center">Create account</button>
+          <div *ngIf="error" class="flex mt-2.5 justify-center text-red-500">
+            <span>Formular invalid </span>
+          </div>
           <!-- <div class="mt-4 h-10 w-3/5 mx-auto">
             <span class="text-center text-xs text-gray-500">By continuing you agree to our <span class="text-center text-xs text-gray-400 mx-auto">Terms of Service</span></span>
           </div> -->

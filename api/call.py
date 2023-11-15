@@ -66,6 +66,17 @@ async def create_users_handler(user: ClassUserCreate):
 
 async def signup(name: str, username: str, email: str, password: str):
     try:
+        # Check if the username or email already exists
+        existing_user = await db.users.find_one(
+            {"$or": [{"username": username}, {"email": email}]}
+        )
+
+        if existing_user:
+            raise HTTPException(
+                status_code=400,
+                detail="Username or email already registered. Choose a different one.",
+            )
+
         # Hash the password before storing it in the database
         hashed_password = pwd_context.hash(password)
 
@@ -78,20 +89,42 @@ async def signup(name: str, username: str, email: str, password: str):
             }
         )
 
+        # Create a token with user data
+        token_data = {"sub": username}
+        expires = datetime.timedelta(days=30)  # One month expiration
+        access_token = create_jwt_token(token_data, expires)
+
         return JSONResponse(
             content={
-                "message": "Utilisateur créé avec succès",
+                "message": "User created successfully",
                 "name": name,
                 "username": username,
                 "email": email,
-                "password": hashed_password,
+                "access_token": access_token,  # Include the token in the response
             }
         )
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Erreur lors de la création de l'utilisateur : {str(e)}",
+            detail=f"Error creating user: {str(e)}",
         )
+    
+@app.get("/api/get_user_info")
+async def get_user_info(username_or_email: str = Depends(oauth2_scheme)):
+    user = await db.users.find_one(
+        {"$or": [{"username": username_or_email}, {"email": username_or_email}]}
+    )
+
+    if user is None:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+
+    fields_to_include = ["name", "username", "email"]
+    result_user = {
+        field: str(user.get(field)) if field == "_id" else user.get(field)
+        for field in fields_to_include
+    }
+
+    return result_user
 
 @app.post("/login")
 async def login(username_or_email: str, password: str):
@@ -104,7 +137,7 @@ async def login(username_or_email: str, password: str):
     
    # Création d'un token avec des données utilisateur
     token_data = {"sub": username_or_email}
-    expires = datetime.timedelta(minutes=1)  # 1 minute d'expiration
+    expires = datetime.timedelta(days=30)  # Un mois d'expiration
     access_token = create_jwt_token(token_data, expires)
 
-    return {"username": username_or_email, "access_token": access_token}
+    return {"username_or_email": username_or_email, "access_token": access_token}

@@ -1,16 +1,10 @@
-from fastapi import Depends, FastAPI, Form, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from fastapi.responses import JSONResponse
-from call import (
-    ClassUserCreate,
-    signup as call_create_users,
-    get_users as call_get_users,
-    login,
-    oauth2_scheme,
-)
 from bson import json_util
 from pydantic import BaseModel
+
+from call import ClassUserCreate, signup as call_create_users, get_users as call_get_users, login, oauth2_scheme, get_user_info
 
 app = FastAPI()
 
@@ -29,11 +23,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 class LoginData(BaseModel):
     username_or_email: str
     password: str
-
 
 @app.get("/api/getusers")
 async def get_users_handler():
@@ -41,14 +33,19 @@ async def get_users_handler():
 
 
 @app.post("/api/createusers")
-async def create_users_handler(user_create: ClassUserCreate):
-    return await call_create_users(
-        user_create.name,
-        user_create.username,
-        user_create.email,
-        user_create.password,
-    )
-
+async def create_users_handler(user: ClassUserCreate):
+    try:
+        return await call_create_users(user.name, user.username, user.email, user.password)
+    except HTTPException as e:
+        raise HTTPException(
+            status_code=e.status_code,
+            detail=f"Error creating user: {e.detail}",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Unexpected error creating user: {str(e)}",
+        )
 
 @app.post("/api/login")
 async def login_route(login_data: LoginData):
@@ -57,7 +54,11 @@ async def login_route(login_data: LoginData):
 # Route protégée qui nécessite l'authentification
 @app.get("/protected")
 async def protected_route(token: str = Depends(oauth2_scheme)):
-    """
-    Exemple de route protégée nécessitant un token d'accès.
-    """
     return {"message": "Bienvenue dans la zone protégée !"}
+
+@app.get("/api/get_user_info")
+async def get_user_info_route(username_or_email: str = Query(..., title="Username or Email")):
+    """
+    Récupère les informations d'un utilisateur par son username ou email.
+    """
+    return await get_user_info(username_or_email)

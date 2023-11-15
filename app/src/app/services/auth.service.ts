@@ -25,4 +25,9 @@ export class ApiService {
     const url = `${this.apiUrl}/api/login`;
     return this.http.post<any>(url, user);
   }
+
+  getUserInfo(usernameOrEmail: string): Observable<any> {
+    const url = `${this.apiUrl}/api/get_user_info?username_or_email=${usernameOrEmail}`;
+    return this.http.get<any>(url);
+  }
 }

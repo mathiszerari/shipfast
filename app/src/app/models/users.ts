@@ -1,4 +1,5 @@
 export interface createUser {
+  access_token: string;
   name: string;
   username: string;
   email: string;

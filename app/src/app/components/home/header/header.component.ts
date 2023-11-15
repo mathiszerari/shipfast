@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/auth.service';
 
 @Component({
@@ -18,13 +19,12 @@ export class HeaderComponent {
 
 
   constructor(
-    private apiService: ApiService) { }
+    private apiService: ApiService,
+    private router: Router) { }
 
   ngOnInit(): void {
     console.log(localStorage);
     console.log(this.username);
-    
-    
     if (this.username != '') {
       this.connected = true;
     }
@@ -38,8 +38,8 @@ export class HeaderComponent {
     window.location.href = '/home';
   }
 
-  pathProfile() {
-    window.location.href = '/profile';
+  navigateToProfile(): void {
+    window.location.href = this.username;
   }
 
   logout() {

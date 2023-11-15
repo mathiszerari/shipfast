@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { loginUser } from 'src/app/models/users';
 import { ApiService } from 'src/app/services/auth.service';
@@ -18,7 +19,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       username_or_email: ['', [Validators.required]],
@@ -39,7 +41,7 @@ export class LoginComponent {
           console.log(localStorage.getItem('username_or_email'));
           console.log(localStorage.getItem('token'));
           this.getUserInfo();
-          window.location.href = '/profile';
+          this.navigateToProfile();
         }
       );
     } else {
@@ -49,6 +51,12 @@ export class LoginComponent {
 
   pathSignup() {
     window.location.href = '/auth/signup';
+  }
+
+  navigateToProfile(): void {
+    setTimeout(() => {
+      window.location.href = this.username;
+    }, 200);
   }
 
   getUserInfo() {

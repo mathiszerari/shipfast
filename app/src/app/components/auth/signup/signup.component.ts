@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { createUser } from 'src/app/models/users';
 import { ApiService } from 'src/app/services/auth.service';
 
@@ -16,7 +17,8 @@ export class SignupComponent {
 
   constructor(
     private fb: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router
   ) {
     this.signupForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -84,13 +86,17 @@ export class SignupComponent {
           localStorage.setItem('token', data.access_token);
           console.log(localStorage.getItem('name'));
           console.log(localStorage.getItem('token'));
-          window.location.href = '/profile';
+          this.navigateToProfile(data.username);
         }
       );
     } else {
       console.log('the form is not valid');
       this.error = true;
     }
+  }
+
+  navigateToProfile(username: string): void {
+    window.location.href = username;
   }
 
   pathLogin() {

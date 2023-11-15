@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { createUser, loginUser } from '../models/users';
+import { createUser, sendLoginUser, receiveLoginUser, receiveUser } from '../models/users';
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +21,13 @@ export class ApiService {
     return this.http.post<createUser>(url, user);
   }
 
-  loginUser(user: any): Observable<any> {
+  loginUser(user: sendLoginUser): Observable<receiveLoginUser> {
     const url = `${this.apiUrl}/api/login`;
-    return this.http.post<any>(url, user);
+    return this.http.post<receiveLoginUser>(url, user);
   }
 
-  getUserInfo(usernameOrEmail: string): Observable<any> {
+  getUserInfo(usernameOrEmail: string): Observable<receiveUser> {
     const url = `${this.apiUrl}/api/get_user_info?username_or_email=${usernameOrEmail}`;
-    return this.http.get<any>(url);
+    return this.http.get<receiveUser>(url);
   }
 }

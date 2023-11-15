@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { loginUser } from 'src/app/models/users';
+import { receiveLoginUser } from 'src/app/models/users';
 import { ApiService } from 'src/app/services/auth.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
       this.apiService.loginUser(formData).subscribe(
-        (data) => {
+        (data: receiveLoginUser) => {
           console.log(data);
           localStorage.clear();
           localStorage.setItem('username_or_email', data.username_or_email);

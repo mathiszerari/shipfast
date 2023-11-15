@@ -1,15 +1,9 @@
-from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-from bson import json_util
 from pydantic import BaseModel
-
-from call import ClassUserCreate, signup as call_create_users, get_users as call_get_users, login, oauth2_scheme, get_user_info
+from call import ClassUserCreate, signup, get_users, login, oauth2_scheme, get_user_info
 
 app = FastAPI()
-
-mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
-db = mongo_client["shipfast"]
 
 origins = [
     "http://localhost:4200",
@@ -29,13 +23,12 @@ class LoginData(BaseModel):
 
 @app.get("/api/getusers")
 async def get_users_handler():
-    return await call_get_users()
-
+    return await get_users()
 
 @app.post("/api/createusers")
 async def create_users_handler(user: ClassUserCreate):
     try:
-        return await call_create_users(user.name, user.username, user.email, user.password)
+        return await signup(user.name, user.username, user.email, user.password)
     except HTTPException as e:
         raise HTTPException(
             status_code=e.status_code,
@@ -51,7 +44,6 @@ async def create_users_handler(user: ClassUserCreate):
 async def login_route(login_data: LoginData):
     return await login(login_data.username_or_email, login_data.password)
 
-# Route protégée qui nécessite l'authentification
 @app.get("/protected")
 async def protected_route(token: str = Depends(oauth2_scheme)):
     return {"message": "Bienvenue dans la zone protégée !"}

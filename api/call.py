@@ -1,11 +1,11 @@
 import datetime
-from fastapi.security import OAuth2PasswordBearer
-from motor.motor_asyncio import AsyncIOMotorClient
-from fastapi import HTTPException, FastAPI, Depends
+from fastapi import HTTPException, Depends, FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, EmailStr, validator
 from passlib.context import CryptContext
 import jwt
+from motor.motor_asyncio import AsyncIOMotorClient
 
 app = FastAPI()
 
@@ -24,23 +24,17 @@ class ClassUserCreate(BaseModel):
             raise ValueError("Le mot de passe doit contenir au moins 8 caractères, au moins une lettre et au moins un chiffre.")
         return value
 
-# Create an instance of CryptContext with appropriate configuration
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-# Clé secrète pour signer les tokens
 SECRET_KEY = "secretkey"
-
-# Algorithme de signature pour PyJWT
 ALGORITHM = "HS256"
 
-# Fonction pour créer un token avec une expiration
 def create_jwt_token(data: dict, expires_delta: datetime.timedelta) -> str:
     expire = datetime.datetime.utcnow() + expires_delta
     data.update({"exp": expire})
     return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
-# Fonction pour dépendance de l'authentification
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 async def get_users():
     users = await db.users.find().to_list(length=100)
@@ -60,13 +54,8 @@ async def get_users():
 
     return result_users
 
-@app.post("/api/createusers")
-async def create_users_handler(user: ClassUserCreate):
-    return await signup(user.name, user.username, user.email, user.password)
-
 async def signup(name: str, username: str, email: str, password: str):
     try:
-        # Check if the username or email already exists
         existing_user = await db.users.find_one(
             {"$or": [{"username": username}, {"email": email}]}
         )
@@ -77,7 +66,6 @@ async def signup(name: str, username: str, email: str, password: str):
                 detail="Username or email already registered. Choose a different one.",
             )
 
-        # Hash the password before storing it in the database
         hashed_password = pwd_context.hash(password)
 
         result = await db.users.insert_one(
@@ -89,9 +77,8 @@ async def signup(name: str, username: str, email: str, password: str):
             }
         )
 
-        # Create a token with user data
         token_data = {"sub": username}
-        expires = datetime.timedelta(days=30)  # One month expiration
+        expires = datetime.timedelta(days=30)
         access_token = create_jwt_token(token_data, expires)
 
         return JSONResponse(
@@ -100,7 +87,7 @@ async def signup(name: str, username: str, email: str, password: str):
                 "name": name,
                 "username": username,
                 "email": email,
-                "access_token": access_token,  # Include the token in the response
+                "access_token": access_token,
             }
         )
     except Exception as e:
@@ -108,8 +95,7 @@ async def signup(name: str, username: str, email: str, password: str):
             status_code=500,
             detail=f"Error creating user: {str(e)}",
         )
-    
-@app.get("/api/get_user_info")
+
 async def get_user_info(username_or_email: str = Depends(oauth2_scheme)):
     user = await db.users.find_one(
         {"$or": [{"username": username_or_email}, {"email": username_or_email}]}
@@ -126,7 +112,6 @@ async def get_user_info(username_or_email: str = Depends(oauth2_scheme)):
 
     return result_user
 
-@app.post("/login")
 async def login(username_or_email: str, password: str):
     user = await db.users.find_one(
         {"$or": [{"username": username_or_email}, {"email": username_or_email}]}
@@ -135,9 +120,8 @@ async def login(username_or_email: str, password: str):
     if user is None or not pwd_context.verify(password, user["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-   # Création d'un token avec des données utilisateur
     token_data = {"sub": username_or_email}
-    expires = datetime.timedelta(days=30)  # Un mois d'expiration
+    expires = datetime.timedelta(days=30)
     access_token = create_jwt_token(token_data, expires)
 
     return {"username_or_email": username_or_email, "access_token": access_token}

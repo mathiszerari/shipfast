@@ -49,4 +49,9 @@ export class HeaderComponent {
   pathProfile() {
     window.location.href = '/profile';
   }
+
+  logout() {
+    localStorage.clear();
+    window.location.href = '/auth/login';
+  }
 }

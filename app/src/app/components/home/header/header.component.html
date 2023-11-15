@@ -21,21 +21,38 @@
 
     <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Blog</span>
   </div>
-  
-  <div class="flex mt-3.5">
-    <div *ngIf="!connected" class="flex">
-      <button (click)="pathLogin()" class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
-        Log in
-      </button>
-      
-      <button class="h-10 transition delay-150 duration-300 text-sm font-medium bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
-        Suscribe
-      </button>
-    </div>
-    <div (click)="pathProfile()" *ngIf="connected" class="cursor-pointer">
-      <!-- Utilisez la directive [innerHTML] pour afficher la chaîne SVG -->
-      <img [src]="pp + name"
-      alt="avatar" alt="Profile Picture" class="w-10 h-10 rounded-full">
+
+  <div *ngIf="!connected" class="flex mt-3.5">
+    <button (click)="pathLogin()" class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
+      Log in
+    </button>
+    
+    <button class="h-10 transition delay-150 duration-300 text-sm font-medium bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
+      Suscribe
+    </button>
+  </div>
+
+  <div  *ngIf="connected" class="mt-4">
+    <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white font-medium rounded-lg text-sm text-center inline-flex items-center m-0 p-0 h-10" type="button">
+      <img [src]="pp + name" alt="avatar" class="w-10 h-10 rounded-full">
+      <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+      </svg>
+    </button>
+    
+    <!-- Dropdown menu -->
+    <div id="dropdownHover" class="z-10 -mt-8 hidden divide-y divide-gray-100 absolute rounded-lg shadow w-40 bg-gray-900">
+      <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownHoverButton">
+          <li (click)="pathProfile()">
+              <a href="/profile" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">View Account</a>
+          </li>
+          <li>
+              <a href="/settings" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">Settings</a>
+          </li>
+          <li>
+              <a href="/auth/login" (click)="logout()" class="transition delay-150 duration-300  block px-4 py-2 text-red-600 hover:text-red-500">Log out</a>
+          </li>
+      </ul>
     </div>
   </div>
 </div>

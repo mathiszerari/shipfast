@@ -16,11 +16,7 @@ export class HeaderComponent {
   pp: string = "https://api.dicebear.com/7.x/thumbs/svg?seed="
   connected: boolean = false;
 
-  constructor() { }
-
   ngOnInit(): void {
-    console.log(localStorage);
-    console.log(this.username);
     if (this.username != '') {
       this.connected = true;
     }
@@ -32,8 +28,6 @@ export class HeaderComponent {
 
   logout() {
     localStorage.clear();
-    console.log(localStorage);
-    
     window.location.href = '/auth/login';
   }
 }

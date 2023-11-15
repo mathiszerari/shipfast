@@ -13,12 +13,10 @@ export class ProfileComponent {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    const routeUsername = this.route.snapshot.paramMap.get('username');
-
-    // Assurez-vous que la valeur n'est pas null avant de l'assigner
-    if (routeUsername) {
-      this.username = routeUsername;
-      console.log(this.username);
+    const usernameParam = this.route.snapshot.paramMap.get('username');
+  
+    if (usernameParam) {
+      this.username = usernameParam;
     }
   }
 

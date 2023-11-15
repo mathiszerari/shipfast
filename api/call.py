@@ -1,13 +1,13 @@
 import datetime
-import json
 from fastapi.security import OAuth2PasswordBearer
 from motor.motor_asyncio import AsyncIOMotorClient
-from fastapi import HTTPException
+from fastapi import HTTPException, FastAPI, Depends
 from fastapi.responses import JSONResponse
-from bson import json_util
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, validator
 from passlib.context import CryptContext
 import jwt
+
+app = FastAPI()
 
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = mongo_client["shipfast"]
@@ -15,8 +15,14 @@ db = mongo_client["shipfast"]
 class ClassUserCreate(BaseModel):
     name: str
     username: str
-    email: str
+    email: EmailStr
     password: str
+
+    @validator("password")
+    def validate_password(cls, value):
+        if len(value) < 8 or not any(c.isalpha() for c in value) or not any(c.isdigit() for c in value):
+            raise ValueError("Le mot de passe doit contenir au moins 8 caractères, au moins une lettre et au moins un chiffre.")
+        return value
 
 # Create an instance of CryptContext with appropriate configuration
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -54,6 +60,9 @@ async def get_users():
 
     return result_users
 
+@app.post("/api/createusers")
+async def create_users_handler(user: ClassUserCreate):
+    return await signup(user.name, user.username, user.email, user.password)
 
 async def signup(name: str, username: str, email: str, password: str):
     try:
@@ -84,7 +93,7 @@ async def signup(name: str, username: str, email: str, password: str):
             detail=f"Erreur lors de la création de l'utilisateur : {str(e)}",
         )
 
-
+@app.post("/login")
 async def login(username_or_email: str, password: str):
     user = await db.users.find_one(
         {"$or": [{"username": username_or_email}, {"email": username_or_email}]}

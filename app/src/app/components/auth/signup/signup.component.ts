@@ -20,7 +20,7 @@ export class SignupComponent {
       name: ['', [Validators.required]],
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: [''] 
+      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/)]]
     });
   }
 
@@ -32,12 +32,12 @@ export class SignupComponent {
         (data) => {
           console.log(data);
         }
-      )
+      );
     } else {
-      console.log('the fromular is not valid');
+      console.log('the formular is not valid');
     }
   }
-  
+
   pathLogin() {
     window.location.href = '/auth/login';
   }

@@ -32,31 +32,14 @@ export class LoginComponent {
       this.apiService.loginUser(formData).subscribe(
         (data) => {
           console.log(data);
-          // Clear all items in the local storage
           localStorage.clear();
           localStorage.setItem('username_or_email', data.username_or_email);
-          data.username_or_email = this.username_or_email
+          this.username_or_email = data.username_or_email
           localStorage.setItem('token', data.access_token);
           console.log(localStorage.getItem('username_or_email'));
           console.log(localStorage.getItem('token'));
+          this.getUserInfo();
           window.location.href = '/profile';
-        }
-      );
-      this.username_or_email = localStorage.getItem('username_or_email') || '';
-      
-      this.apiService.getUserInfo(this.username_or_email).subscribe(
-        (data: any) => {
-          console.log(data);
-          this.name = data.name
-          localStorage.setItem('name', data.name);
-          this.username = data.username
-          localStorage.setItem('username', data.username);
-          this.email = data.email
-          localStorage.setItem('email', data.email);
-          console.log(data);
-        },
-        (error) => {
-          console.error('Error fetching user:', error);
         }
       );
     } else {
@@ -66,5 +49,24 @@ export class LoginComponent {
 
   pathSignup() {
     window.location.href = '/auth/signup';
+  }
+
+  getUserInfo() {
+    this.apiService.getUserInfo(this.username_or_email).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.name = data.name
+        localStorage.setItem('name', data.name);
+        this.username = data.username
+        localStorage.setItem('username', data.username);
+        this.email = data.email
+        localStorage.setItem('email', data.email);
+        console.log(data);
+        console.log('salut');
+      },
+      (error) => {
+        console.error('Error fetching user:', error);
+      }
+    );
   }
 }

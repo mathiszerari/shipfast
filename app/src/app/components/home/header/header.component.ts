@@ -22,6 +22,8 @@ export class HeaderComponent {
 
   ngOnInit(): void {
     console.log(localStorage);
+    console.log(this.username);
+    
     
     if (this.username != '') {
       this.connected = true;

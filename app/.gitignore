@@ -20,6 +20,7 @@ node_modules/
 *.json
 *.pack
 *.old
+*.DS_Store
 
 # Fichiers temporaires
 *.tmp

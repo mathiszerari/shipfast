@@ -1,0 +1,79 @@
+<div class="flex justify-center mt-16 gap-24">
+  <div class="basis-2/4 mt-24 justify-center flex-col items-center">
+    <span class="text-xl font-medium text-gray-200 mb-6 flex justify-center">Start building and collaborating</span>
+
+    <div id="default-carousel" class="relative " data-carousel="slide">
+      <div class="flex justify-center mx-auto relative overflow-hidden h-96 border-10 w-478">
+          <div class="hidden duration-700 ease-in-out border-10" data-carousel-item>
+              <img src="../../../../assets/Cascade tee (Copy).png" class="absolute block w-478 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+          </div>
+          <div class="hidden duration-700 ease-in-out border-10" data-carousel-item>
+              <img src="../../../../assets/Cascade tee (Copy)2.png" class="absolute block w-478 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+          </div>
+          <div class="hidden duration-700 ease-in-out border-10" data-carousel-item>
+              <img src="../../../../assets/Cascade tee (Copy)3.png" class="absolute block w-478 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+          </div>
+      </div>
+      <div class="flex justify-center relative mt-10 z-30 -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+          <button type="button" class="w-3 h-3 rounded-full bg-gray-300" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+          <button type="button" class="w-3 h-3 rounded-full bg-gray-300" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+          <button type="button" class="w-3 h-3 rounded-full bg-gray-300" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class=" justify-center flex-col items-center">
+    <div class="px-8">
+      <!-- Put here your logo -->
+      <div class="flex justify-center">
+        <img src="../../../../assets/newlogo.png" alt="Profile Photo" class="w-16 mb-6">
+      </div>
+      <span class="text-2xl font-medium text-gray-200 mb-6 flex justify-center">Create your account</span>
+  
+      <div class="mx-auto pb-6">
+        <div class="flex flex-row gap-5 justify-center">
+          <button class="cursor-pointer bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg">
+            <a>
+              <img src="../../../../assets/apple.png" alt="Profile Photo" class="w-5 h-5">
+            </a>
+          </button>
+  
+          <button class="bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg">
+            <a>
+              <img src="../../../../assets/github.png" alt="Profile Photo" class="w-5 h-5">
+            </a>
+          </button>
+  
+          <button class="bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg">
+            <a>
+              <img src="../../../../assets/google.png" alt="Profile Photo" class="w-5 h-5">
+            </a>
+          </button>
+        </div>
+  
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="mt-6">
+          <div class="mb-4">
+            <input formControlName="name" type="text" id="name" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Name" required>
+          </div>
+          <div class="mb-4">
+            <input formControlName="username" type="username" id="username" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Username" required>
+          </div>
+          <div class="mb-4">
+            <input formControlName="email" type="email" id="email" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Email address" required>
+          </div>
+          <div class="mb-4">
+            <input formControlName="password" type="password" id="password" class="shadow-sm text-white bg-gray-900 placeholder-gray-500 border border-gray-700 text-sm rounded-lg block w-full p-2.5" placeholder="Password (optional)" required>
+          </div>
+          <button type="submit" class="cursor-pointer w-full text-gray-950 bg-gray-200 focus:ring-4 focus:out border-10 w-478line-none font-medium rounded-lg text-sm py-2.5 text-center">Create account</button>
+          <!-- <div class="mt-4 h-10 w-3/5 mx-auto">
+            <span class="text-center text-xs text-gray-500">By continuing you agree to our <span class="text-center text-xs text-gray-400 mx-auto">Terms of Service</span></span>
+          </div> -->
+        </form>
+        <button (click)="pathLogin()" class="cursor-pointer group flex justify-center transition delay-150 duration-300 mt-10 w-full text-gray-400 bg-gray-950 border border-gray-800 focus:ring-4 focus:out border-10 w-478line-none font-medium hover:text-gray-300 rounded-lg text-sm py-2.5 text-center">
+          <span class="transform ml-1">I already have an account</span> 
+          <div class="transform group-hover:translate-x-1 ml-1 duration-300">→</div>
+        </button>           
+      </div>
+    </div>
+  </div>
+</div>

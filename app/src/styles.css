@@ -1,0 +1,19 @@
+#profile {
+  background-color: red;
+}
+
+#picture {
+  z-index: 9999;
+}
+
+.bg-gray-300 {
+  background-color: #D1D5DB !important;
+}
+
+.border-10 {
+  border-radius: 10px !important;
+}
+
+.w-478 {
+  width: 478px !important;
+}

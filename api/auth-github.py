@@ -3,6 +3,8 @@ import httpx
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 
+# code à appeler depuis le main
+
 app = FastAPI()
 github_client_id = 'eff2af781a226c4fcd5a'
 github_client_secret = '124d9004aca6ea359b1f3838b32041e53116626b'

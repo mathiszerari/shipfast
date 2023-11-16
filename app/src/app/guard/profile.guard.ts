@@ -3,10 +3,10 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../services/token.service';
 
-
 @Injectable({
   providedIn: 'root',
 })
+
 export class ProfileGuard implements CanActivate {
   constructor(private authService: AuthenticationService, private router: Router) {}
 

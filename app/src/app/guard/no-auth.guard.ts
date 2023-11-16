@@ -6,6 +6,7 @@ import { AuthenticationService } from '../services/token.service';
 @Injectable({
   providedIn: 'root',
 })
+
 export class NoAuthGuard implements CanActivate {
   constructor(private authService: AuthenticationService, private router: Router) {}
 

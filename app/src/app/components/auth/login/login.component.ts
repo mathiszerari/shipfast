@@ -60,6 +60,11 @@ export class LoginComponent {
     );
   }
 
+  loginGithub() {
+
+    window.location.href = 'http://127.0.0.1:8000/api/github-login';
+  }
+
   pathSignup() {
     window.location.href = '/auth/signup';
   }

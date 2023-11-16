@@ -23,7 +23,7 @@ export class LoginComponent {
     private apiService: ApiService,
   ) {
     this.loginForm = this.formBuilder.group({
-      usernameOrEmail: ['', [Validators.required]],
+      username_or_email: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
   }

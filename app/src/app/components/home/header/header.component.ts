@@ -28,22 +28,25 @@ export class HeaderComponent {
       this.connected = true;
     }
 
-    const access_token = localStorage.getItem('acces_token');
-    if (access_token) {
+    const access_token = localStorage.getItem('token');
 
+    if (access_token) {
       this.apiService.githubUser(access_token!).subscribe((data: any) => {
         console.log(data);
       })
-
     } else {
-
       this.route.queryParams.subscribe(params => {
         const code = params['code'];
         if (code ) {
           this.apiService.githubLogin(code).subscribe((data: any) => {
-            localStorage.setItem('acces_token', data);
+            localStorage.setItem('token', data);
+            console.log(data);
             console.log("done");
             
+            this.apiService.githubUser(data).subscribe((data: any) => {
+              console.log(data);
+              window.location.href = data.login;
+            })
           });
         }
       });

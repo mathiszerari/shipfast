@@ -24,13 +24,14 @@ export class ProfileComponent {
       this.username = usernameParam;
     }
 
-    if (localStorage.getItem('access_token') !== null) {
+    if (localStorage.getItem('token') !== null) {
+      console.log(this.username);
+      
       this.authService.getUserInfo(this.username).subscribe(
         (data: any) => {
           this.name = data.name;
           this.username = data.username;
           this.email = data.email;
-          localStorage.clear
           localStorage.setItem('name', this.name);
           localStorage.setItem('username', this.username);
           localStorage.setItem('email', this.email);

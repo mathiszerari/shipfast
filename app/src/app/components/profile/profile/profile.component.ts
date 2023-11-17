@@ -15,6 +15,7 @@ export class ProfileComponent {
   come_from: string = localStorage.getItem('come_from') || "";
   location: string = localStorage.getItem('location') || "";
   blog: string = localStorage.getItem('blog') || "";
+  github_username: string = localStorage.getItem('github_username') || "";
   twitter_username: string = localStorage.getItem('twitter_username') || "";
   arobase: string = "@"
 
@@ -36,6 +37,7 @@ export class ProfileComponent {
           this.location = data.location;
           this.blog = data.blog;
           this.twitter_username = data.twitter_username;
+          this.github_username = data.github_username;
           localStorage.setItem('name', this.name);
           localStorage.setItem('username', this.username);
           localStorage.setItem('email', this.email);
@@ -55,7 +57,6 @@ export class ProfileComponent {
 
   openBlog() {
     var httpurl = "https://";
-
     if (this.blog) {
       window.location.href = httpurl + this.blog;
       console.log("Redirection vers le blog:", httpurl + this.blog);
@@ -66,8 +67,8 @@ export class ProfileComponent {
     var httpurl = "https://github.com/";
 
     if (this.blog) {
-      window.location.href = httpurl + this.username;
-      console.log("Redirection vers le username:", httpurl + this.username);
+      window.location.href = httpurl + this.github_username;
+      console.log("Redirection vers le github_username:", httpurl + this.github_username);
     }
   }
 
@@ -75,8 +76,8 @@ export class ProfileComponent {
     var httpurl = "https://twitter.com/";
 
     if (this.blog) {
-      window.location.href = httpurl + this.username;
-      console.log("Redirection vers le username:", httpurl + this.username);
+      window.location.href = httpurl + this.twitter_username;
+      console.log("Redirection vers le twitter_username:", httpurl + this.twitter_username);
     }
   }
 

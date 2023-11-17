@@ -97,7 +97,7 @@ class UserManager:
         if user is None:
             raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username"]
+        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username"]
         result_user = {
             field: str(user.get(field)) if field == "_id" else user.get(field)
             for field in fields_to_include

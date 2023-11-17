@@ -13,6 +13,7 @@ export class UsernameCreationComponent {
   createUsernameForm: FormGroup;
   username: string = ""
   error!: string
+  warning!: string
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,7 +25,9 @@ export class UsernameCreationComponent {
   }
 
   ngOnInit(): void {
-    console.log(localStorage.getItem('username'));
+    if (localStorage.getItem('catch_him') == 'true') {
+      this.warning = "You need to complete this step before continuing your navigation 🔒"
+    }
   }
 
   onSubmit() {
@@ -41,7 +44,10 @@ export class UsernameCreationComponent {
     this.authGithub.shipfastUsername(data).subscribe(
       (data: any) => {
         console.log(data);
-        window.location.href = this.username;
+
+        localStorage.setItem('catch_him', '')
+        localStorage.setItem('is_typing_username', '')
+        window.location.href = this.username
       },
       (error: any) => {
         console.error(error);

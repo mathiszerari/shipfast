@@ -38,9 +38,7 @@ export class HeaderComponent {
       if (localStorage.getItem('access_token')) {
         this.authGithub.githubUser(access_token!).subscribe((data: any) => {
           console.log(data);
-          console.log(data.login);
 
-          this.username = data.login;
           localStorage.setItem('github_username', data.login);
           localStorage.setItem('name', data.name);
           localStorage.setItem('email', data.email);
@@ -65,6 +63,8 @@ export class HeaderComponent {
               (data: any) => {
                 console.log(data);
                 if (!data.username) {
+                  this.connected = false;
+                  localStorage.setItem('is_typing_username', 'true');
                   window.location.href = '/username-creation';
                 }
               }
@@ -91,6 +91,14 @@ export class HeaderComponent {
         }
       });
     }
+
+    if (localStorage.getItem('is_typing_username') == 'true' && window.location.pathname !== '/username-creation') {
+      localStorage.setItem('catch_him', 'true');
+      this.connected = false
+      window.location.href = '/username-creation';
+    }
+    console.log(this.username);
+    
   }
 
   navigateToProfile(): void {

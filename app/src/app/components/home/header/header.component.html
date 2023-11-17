@@ -24,7 +24,7 @@
     <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Blog</span>
   </div>
 
-  <div *ngIf="!connected" class="flex mt-3.5">
+  <div *ngIf="!connected || !username" class="flex mt-3.5">
     <button class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
       <a href="auth/login">
         Log in
@@ -36,7 +36,7 @@
     </button>
   </div>
 
-  <div  *ngIf="connected" class="mt-4">
+  <div *ngIf="connected && username" class="mt-4">
     <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white font-medium rounded-lg text-sm text-center inline-flex items-center m-0 p-0 h-10" type="button">
       <img [src]="pp + username" alt="avatar" [alt]="username + '_pp'" class="w-10 h-10 rounded-full">
       <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">

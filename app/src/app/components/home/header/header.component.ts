@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GithubUser } from 'src/app/models/github-user.model';
 import { AuthGithubService } from 'src/app/services/auth-github.service';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -34,8 +35,26 @@ export class HeaderComponent {
     if (access_token) {
       this.authGithub.githubUser(access_token!).subscribe((data: any) => {
         console.log(data);
+        console.log(data.login);
+
+        const userData: GithubUser = {
+          id: data.id,
+          login: data.login,
+          name: data.name || '',
+          email: data.email || '',
+          location: data.location || '',
+          come_from: 'github'
+        };
+        if (!localStorage.getItem('username')) {
+          this.authGithub.saveGithubUser(userData).subscribe(
+            (data: any) => {
+              console.log(data);
+            }
+          )
+        }
       })
     } else {
+      // first connection
       this.route.queryParams.subscribe(params => {
         const code = params['code'];
         if (code ) {

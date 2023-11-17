@@ -66,6 +66,7 @@ class UserManager:
                     "username": username,
                     "email": email,
                     "password": hashed_password,
+                    "come_from": 'shipfast',
                 }
             )
 

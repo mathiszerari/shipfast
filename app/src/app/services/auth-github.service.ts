@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { GithubUser } from '../models/github-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,10 @@ export class AuthGithubService {
   githubUser(token: string): Observable<any[]> {
     const url = `${this.apiUrl}/api/github-user?access_token=${token}`;
     return this.http.get<any[]>(url);
+  }
+
+  saveGithubUser(user: GithubUser): Observable<GithubUser> {
+    const url = `${this.apiUrl}/api/github-save-user`;
+    return this.http.post<GithubUser>(url, user);
   }
 }

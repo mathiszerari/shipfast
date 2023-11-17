@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styles: [
   ]
 })
-  
+
 export class HeaderComponent {
   user: any
   username_or_email: string = localStorage.getItem('username') || '';
@@ -23,7 +23,7 @@ export class HeaderComponent {
   constructor(
     private authGithub: AuthGithubService,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.username != '') {
@@ -34,28 +34,33 @@ export class HeaderComponent {
 
     if (access_token) {
       console.log("token");
-      
+
       if (localStorage.getItem('access_token')) {
         this.authGithub.githubUser(access_token!).subscribe((data: any) => {
           console.log(data);
           console.log(data.login);
-  
+
           this.username = data.login;
           localStorage.setItem('username', data.login);
           localStorage.setItem('name', data.name);
           localStorage.setItem('email', data.email);
           localStorage.setItem('location', data.location);
+          localStorage.setItem('come_from', 'github');
           this.connected = true;
-  
+
           const userData: GithubUser = {
             id: data.id,
             login: data.login,
             name: data.name || '',
             email: data.email || '',
+            come_from: 'github',
             location: data.location || '',
-            come_from: 'github'
+            blog: data.blog || '',
+            twitter_username: data.twitter_username || '',
           };
-          if (!localStorage.getItem('username')) {
+
+          if (localStorage.getItem('come_from') == 'github' && !localStorage.getItem('save_user')) {
+            localStorage.setItem('save_user', 'true');
             this.authGithub.saveGithubUser(userData).subscribe(
               (data: any) => {
                 console.log(data);
@@ -65,18 +70,15 @@ export class HeaderComponent {
         })
       }
     } else {
-      console.log("no token");
-      
-      // first connection
       this.route.queryParams.subscribe(params => {
         const code = params['code'];
-        if (code ) {
+        if (code) {
           this.authGithub.githubLogin(code).subscribe((data: any) => {
             localStorage.setItem('token', data);
             localStorage.setItem('access_token', data);
             console.log(data);
             console.log("done");
-            
+
             this.authGithub.githubUser(data).subscribe((data: any) => {
               console.log(data);
               window.location.href = data.login;

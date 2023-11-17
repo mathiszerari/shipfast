@@ -71,6 +71,8 @@ async def get_user_info_route(data: dict):
 
     return await user_manager.get_user_info(username_or_email)
 
+
+# Github stuff
 @app.get("/api/github-login")
 async def github_login():
     return RedirectResponse(f'https://github.com/login/oauth/authorize?client_id={github_client_id}', status_code=303)
@@ -106,6 +108,8 @@ class GithubUser(BaseModel):
   email: str
   come_from: str
   location: str
+  blog: str
+  twitter_username: str
 
 @app.post("/api/github-save-user")
 async def github_save_user(user_data: GithubUser):
@@ -117,7 +121,9 @@ async def github_save_user(user_data: GithubUser):
                 "username": user_data.login,
                 "email": user_data.email,
                 "come_from": "github",
-                "location": user_data.location
+                "location": user_data.location,
+                "blog": user_data.blog,
+                "twitter_username": user_data.twitter_username
             }
         )
 
@@ -128,7 +134,9 @@ async def github_save_user(user_data: GithubUser):
                 "name": user_data.name,
                 "username": user_data.login,
                 "email": user_data.email,
-                "location": user_data.location
+                "location": user_data.location,
+                "blog": user_data.blog,
+                "twitter_username": user_data.twitter_username
             }
         )
     except Exception as e:

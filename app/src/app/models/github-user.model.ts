@@ -5,4 +5,6 @@ export interface GithubUser {
   email: string;
   come_from: string;
   location: string;
+  blog: string;
+  twitter_username: string;
 }

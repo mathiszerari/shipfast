@@ -1,6 +1,5 @@
-import datetime
-from typing import Optional
-from fastapi import FastAPI, HTTPException, Request
+import os
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,11 +7,10 @@ from pydantic import BaseModel
 from starlette.responses import RedirectResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
-# code à appeler depuis le main
-
 app = FastAPI()
-github_client_id = 'eff2af781a226c4fcd5a'
-github_client_secret = '124d9004aca6ea359b1f3838b32041e53116626b'
+
+github_client_id = os.getenv("GITHUB_CLIENT_ID")
+github_client_secret = os.getenv("GITHUB_CLIENT_SECRET")
 
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = mongo_client["shipfast"]

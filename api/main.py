@@ -144,3 +144,19 @@ async def github_save_user(user_data: GithubUser):
             status_code=500,
             detail=f"Error creating user: {str(e)}"
         )
+    
+class UsernameCreation(BaseModel):
+  github_username: str
+  username: str
+
+@app.post("/api/username-creation")
+async def shipfast_username(data: UsernameCreation):
+    user = await db.users.find_one({"github_username": data.github_username})
+
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Mise à jour du champ username
+    await db.users.update_one({"github_username": data.github_username}, {"$set": {"username": data.username}})
+
+    return data

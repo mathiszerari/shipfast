@@ -8,3 +8,8 @@ export interface GithubUser {
   blog: string;
   twitter_username: string;
 }
+
+export interface UsernameCreation {
+  github_username: string;
+  username: string;
+}

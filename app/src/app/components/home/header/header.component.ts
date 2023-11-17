@@ -41,7 +41,7 @@ export class HeaderComponent {
           console.log(data.login);
 
           this.username = data.login;
-          localStorage.setItem('username', data.login);
+          localStorage.setItem('github_username', data.login);
           localStorage.setItem('name', data.name);
           localStorage.setItem('email', data.email);
           localStorage.setItem('location', data.location);

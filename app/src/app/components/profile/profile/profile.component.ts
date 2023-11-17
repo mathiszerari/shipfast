@@ -23,13 +23,12 @@ export class ProfileComponent {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    if (localStorage.getItem('token') !== null && !localStorage.getItem('save_user')) {
+    if ((localStorage.getItem('token') !== null && !localStorage.getItem('save_user')) || localStorage.getItem('username_craft') != '') {
       console.log(this.username);
       
       this.authService.getUserInfo(this.username).subscribe(
         (data: any) => {
           console.log(data);
-          
           this.name = data.name;
           this.username = data.username;
           this.email = data.email;
@@ -44,6 +43,7 @@ export class ProfileComponent {
           localStorage.setItem('location', this.location);
           localStorage.setItem('blog', this.blog);
           localStorage.setItem('twitter_username', this.twitter_username);
+          localStorage.setItem('username_crafted', '');
           console.log(data);
         },
         (error) => {

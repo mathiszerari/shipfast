@@ -37,6 +37,13 @@ export class HeaderComponent {
         console.log(data);
         console.log(data.login);
 
+        this.username = data.login;
+        localStorage.setItem('username', data.login);
+        localStorage.setItem('name', data.name || '');
+        localStorage.setItem('email', data.email || '');
+        localStorage.setItem('location', data.location || '');
+        this.connected = true;
+
         const userData: GithubUser = {
           id: data.id,
           login: data.login,

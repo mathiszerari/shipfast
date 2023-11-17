@@ -4,8 +4,9 @@ import { HomeComponent } from './components/home/home/home.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
 import { ProfileGuard } from './guard/profile.guard';
 import { LoginComponent } from './components/auth/login/login.component';
-import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileComponent } from './components/profile/profile/profile.component';
 import { NoAuthGuard } from './guard/no-auth.guard';
+import { UsernameCreationComponent } from './components/profile/username-creation/username-creation.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
       { path: 'signup', component: SignupComponent, canActivate: [NoAuthGuard] },
     ]
+  },
+  {
+    path: 'username-creation',
+    component: UsernameCreationComponent,
   },
   {
     path: ':username',

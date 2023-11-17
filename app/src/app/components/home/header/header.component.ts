@@ -64,6 +64,9 @@ export class HeaderComponent {
             this.authGithub.saveGithubUser(userData).subscribe(
               (data: any) => {
                 console.log(data);
+                if (!data.username) {
+                  window.location.href = '/username-creation';
+                }
               }
             )
           }
@@ -81,6 +84,7 @@ export class HeaderComponent {
 
             this.authGithub.githubUser(data).subscribe((data: any) => {
               console.log(data);
+              
               window.location.href = data.login;
             })
           });

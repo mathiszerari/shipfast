@@ -104,7 +104,7 @@ async def github_user(access_token: str):
 class GithubUser(BaseModel):
   id: int
   name: str
-  login: str
+  github_username: str
   email: str
   come_from: str
   location: str
@@ -118,7 +118,7 @@ async def github_save_user(user_data: GithubUser):
             {
                 "id": user_data.id,
                 "name": user_data.name,
-                "username": user_data.login,
+                "github_username": user_data.github_username,
                 "email": user_data.email,
                 "come_from": "github",
                 "location": user_data.location,
@@ -132,7 +132,7 @@ async def github_save_user(user_data: GithubUser):
                 "message": "User created successfully",
                 "id": user_data.id,
                 "name": user_data.name,
-                "username": user_data.login,
+                "github_username": user_data.github_username,
                 "email": user_data.email,
                 "location": user_data.location,
                 "blog": user_data.blog,

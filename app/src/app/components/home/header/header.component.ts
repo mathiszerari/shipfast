@@ -50,7 +50,7 @@ export class HeaderComponent {
 
           const userData: GithubUser = {
             id: data.id,
-            login: data.login,
+            github_username: data.login,
             name: data.name || '',
             email: data.email || '',
             come_from: 'github',

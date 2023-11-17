@@ -24,21 +24,23 @@ export class ProfileComponent {
       this.username = usernameParam;
     }
 
-    this.apiService.getUserInfo(this.username).subscribe(
-      (data: any) => {
-        this.name = data.name;
-        this.username = data.username;
-        this.email = data.email;
-        localStorage.clear
-        localStorage.setItem('name', this.name);
-        localStorage.setItem('username', this.username);
-        localStorage.setItem('email', this.email);
-        console.log(data);
-      },
-      (error) => {
-        console.error('Error fetching user:', error);
-      }
-    );
+    if (localStorage.getItem('access_token') !== null) {
+      this.apiService.getUserInfo(this.username).subscribe(
+        (data: any) => {
+          this.name = data.name;
+          this.username = data.username;
+          this.email = data.email;
+          localStorage.clear
+          localStorage.setItem('name', this.name);
+          localStorage.setItem('username', this.username);
+          localStorage.setItem('email', this.email);
+          console.log(data);
+        },
+        (error) => {
+          console.error('Error fetching user:', error);
+        }
+      );
+    }
   }
 
   logout() {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthCreateUser } from 'src/app/models/create-user.model';
-import { ApiService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,7 +18,7 @@ export class SignupComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private apiService: ApiService,
+    private authService: AuthService,
   ) {
     this.signupForm = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -35,7 +35,7 @@ export class SignupComponent {
   onSubmit() {
     if (this.signupForm.valid) {
       const formData: AuthCreateUser = this.signupForm.value;
-      this.apiService.createUser(formData).subscribe((data) => {
+      this.authService.createUser(formData).subscribe((data) => {
         this.error = false;
         localStorage.clear();
         localStorage.setItem('name', data.name);

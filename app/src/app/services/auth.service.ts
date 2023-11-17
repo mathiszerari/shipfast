@@ -8,7 +8,8 @@ import { UserProfile } from '../models/user-info.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+
+export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000';
 
   constructor(private http: HttpClient) { }
@@ -31,15 +32,5 @@ export class ApiService {
   getUserInfo(usernameOrEmail: string): Observable<UserProfile> {
     const url = `${this.apiUrl}/api/get_user_info`;
     return this.http.post<UserProfile>(url, { username_or_email: usernameOrEmail });
-  }
-
-  githubLogin(code: string): Observable<any[]> {
-    const url = `${this.apiUrl}/api/github-token?code=${code}`;
-    return this.http.get<any[]>(url);
-  }
-
-  githubUser(token: string): Observable<any[]> {
-    const url = `${this.apiUrl}/api/github-user?access_token=${token}`;
-    return this.http.get<any[]>(url);
   }
 }

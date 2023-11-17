@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,17 +15,17 @@ export class ProfileComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService) { }
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     const usernameParam = this.route.snapshot.paramMap.get('username');
-  
+
     if (usernameParam) {
       this.username = usernameParam;
     }
 
     if (localStorage.getItem('access_token') !== null) {
-      this.apiService.getUserInfo(this.username).subscribe(
+      this.authService.getUserInfo(this.username).subscribe(
         (data: any) => {
           this.name = data.name;
           this.username = data.username;

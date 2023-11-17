@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { AuthReceiveLoginUser } from 'src/app/models/login-user.model';
 
 @Component({
@@ -20,7 +20,7 @@ export class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private apiService: ApiService,
+    private authService: AuthService,
   ) {
     this.loginForm = this.formBuilder.group({
       username_or_email: ['', [Validators.required]],
@@ -31,7 +31,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-      this.apiService.loginUser(formData).subscribe((data: AuthReceiveLoginUser) => {
+      this.authService.loginUser(formData).subscribe((data: AuthReceiveLoginUser) => {
         localStorage.clear();
         localStorage.setItem('username_or_email', data.username_or_email);
         this.username_or_email = data.username_or_email;
@@ -45,7 +45,7 @@ export class LoginComponent {
   }
 
   getUserInfo() {
-    this.apiService.getUserInfo(this.username_or_email).subscribe(
+    this.authService.getUserInfo(this.username_or_email).subscribe(
       (data: any) => {
         this.name = data.name;
         this.username = data.username;

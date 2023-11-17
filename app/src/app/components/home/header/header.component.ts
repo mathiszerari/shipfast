@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService } from 'src/app/services/auth.service';
+import { AuthGithubService } from 'src/app/services/auth-github.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +20,7 @@ export class HeaderComponent {
   connected: boolean = false;
 
   constructor(
-    private apiService: ApiService,
+    private authGithub: AuthGithubService,
     private route: ActivatedRoute,
   ) {}
 
@@ -31,19 +32,19 @@ export class HeaderComponent {
     const access_token = localStorage.getItem('token');
 
     if (access_token) {
-      this.apiService.githubUser(access_token!).subscribe((data: any) => {
+      this.authGithub.githubUser(access_token!).subscribe((data: any) => {
         console.log(data);
       })
     } else {
       this.route.queryParams.subscribe(params => {
         const code = params['code'];
         if (code ) {
-          this.apiService.githubLogin(code).subscribe((data: any) => {
+          this.authGithub.githubLogin(code).subscribe((data: any) => {
             localStorage.setItem('token', data);
             console.log(data);
             console.log("done");
             
-            this.apiService.githubUser(data).subscribe((data: any) => {
+            this.authGithub.githubUser(data).subscribe((data: any) => {
               console.log(data);
               window.location.href = data.login;
             })
@@ -51,7 +52,6 @@ export class HeaderComponent {
         }
       });
     }
-
   }
 
   navigateToProfile(): void {

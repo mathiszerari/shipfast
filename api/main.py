@@ -149,12 +149,20 @@ class UsernameCreation(BaseModel):
   github_username: str
   username: str
 
+from fastapi import HTTPException
+
 @app.post("/api/username-creation")
 async def shipfast_username(data: UsernameCreation):
     user = await db.users.find_one({"github_username": data.github_username})
 
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
+
+    # Vérifier si le nouveau username existe déjà dans la base de données
+    existing_user = await db.users.find_one({"username": data.username})
+
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Username already exists")
 
     # Mise à jour du champ username
     await db.users.update_one({"github_username": data.github_username}, {"$set": {"username": data.username}})

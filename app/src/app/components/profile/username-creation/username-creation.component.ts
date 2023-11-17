@@ -12,6 +12,7 @@ import { AuthGithubService } from 'src/app/services/auth-github.service';
 export class UsernameCreationComponent {
   createUsernameForm: FormGroup;
   username: string = ""
+  error!: string
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,6 +42,14 @@ export class UsernameCreationComponent {
       (data: any) => {
         console.log(data);
         window.location.href = this.username;
-      })
+      },
+      (error: any) => {
+        console.error(error);
+        // Ici, vous pouvez accéder à l'erreur détaillée
+        const errorMessage = error.error?.detail || 'An error occurred';
+        // Traitez l'erreur comme vous le souhaitez (affichage à l'utilisateur, etc.)
+        this.error = errorMessage;
+      }
+    )
   }
 }

@@ -1,18 +1,21 @@
+import os
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 import httpx
+from dotenv import load_dotenv
 from user_manager import UserManager, ClassUserCreate, oauth2_scheme
 from user_manager import UserManager
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
+load_dotenv()
 
 app = FastAPI()
 
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = mongo_client["shipfast"]
-github_client_id = 'eff2af781a226c4fcd5a'
-github_client_secret = '124d9004aca6ea359b1f3838b32041e53116626b'
+github_client_id = os.getenv("github_client_id")
+github_client_secret = os.getenv("github_client_secret")
 
 user_manager = UserManager(db)
 

@@ -23,13 +23,7 @@ export class ProfileComponent {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    const usernameParam = this.route.snapshot.paramMap.get('username');
-
-    if (usernameParam) {
-      this.username = usernameParam;
-    }
-
-    if (localStorage.getItem('token') !== null) {
+    if (localStorage.getItem('token') !== null && !localStorage.getItem('save_user')) {
       console.log(this.username);
       
       this.authService.getUserInfo(this.username).subscribe(
@@ -57,8 +51,33 @@ export class ProfileComponent {
         }
       );
     }
-    console.log(this.location);
-    
+  }
+
+  openBlog() {
+    var httpurl = "https://";
+
+    if (this.blog) {
+      window.location.href = httpurl + this.blog;
+      console.log("Redirection vers le blog:", httpurl + this.blog);
+    }
+  }
+
+  openGithub() {
+    var httpurl = "https://github.com/";
+
+    if (this.blog) {
+      window.location.href = httpurl + this.username;
+      console.log("Redirection vers le username:", httpurl + this.username);
+    }
+  }
+
+  openTwitter() {
+    var httpurl = "https://twitter.com/";
+
+    if (this.blog) {
+      window.location.href = httpurl + this.username;
+      console.log("Redirection vers le username:", httpurl + this.username);
+    }
   }
 
   logout() {

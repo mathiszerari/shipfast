@@ -2,7 +2,7 @@
   <div class="px-8 my-4 cursor-pointer">
     <!-- Put here your logo -->
     <a href="home">
-      <img src="../../../../assets/newlogo.png" alt="Profile Photo" class="w-10 h-10">
+      <img src="../../../../assets/newlogo.png" alt="Shipfast logo" class="w-10 h-10">
     </a>
   </div>
   
@@ -38,7 +38,7 @@
 
   <div  *ngIf="connected" class="mt-4">
     <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white font-medium rounded-lg text-sm text-center inline-flex items-center m-0 p-0 h-10" type="button">
-      <img [src]="pp + username" alt="avatar" class="w-10 h-10 rounded-full">
+      <img [src]="pp + username" alt="avatar" [alt]="username + '_pp'" class="w-10 h-10 rounded-full">
       <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
       </svg>

@@ -9,9 +9,7 @@ app = FastAPI()
 github_client_id = 'eff2af781a226c4fcd5a'
 github_client_secret = '124d9004aca6ea359b1f3838b32041e53116626b'
 
-origins = [
-    "http://localhost:4200",
-]
+origins = ["http://localhost:4200"]
 
 app.add_middleware(
     CORSMiddleware,

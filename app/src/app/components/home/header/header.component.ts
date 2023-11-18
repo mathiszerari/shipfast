@@ -40,7 +40,7 @@ export class HeaderComponent {
             console.log(data);
             console.log("done");
 
-            this.authGithub.githubUser(data).subscribe((data: any) => {
+            this.authGithub.githubToken(data).subscribe((data: any) => {
               console.log(data);
               
               window.location.href = data.login;

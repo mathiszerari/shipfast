@@ -45,7 +45,7 @@ export class UsernameCreationComponent {
       console.log("token");
 
       if (localStorage.getItem('access_token')) {
-        this.authGithub.githubUser(access_token!).subscribe((data: any) => {
+        this.authGithub.githubToken(access_token!).subscribe((data: any) => {
           console.log(data);
 
           this.localUser(data)
@@ -92,6 +92,6 @@ export class UsernameCreationComponent {
     localStorage.setItem('location', data.location);
     localStorage.setItem('blog', 'blog');
     localStorage.setItem('twitter_username', data.twitter_username);
-    console.log(localStorage); 
+    console.log(localStorage);
   }
 }

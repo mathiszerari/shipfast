@@ -39,9 +39,7 @@ export class LoginComponent {
         this.getUserInfo();
         this.navigateToProfile();
       });
-    } else {
-      console.log('The form is not valid');
-    }
+    } 
   }
 
   getUserInfo() {
@@ -50,9 +48,7 @@ export class LoginComponent {
         this.name = data.name;
         this.username = data.username;
         this.email = data.email;
-        localStorage.setItem('name', this.name);
-        localStorage.setItem('username', this.username);
-        localStorage.setItem('email', this.email);
+        this.localUser(this);
       },
       (error) => {
         console.error('Error fetching user:', error);
@@ -73,5 +69,11 @@ export class LoginComponent {
   openLogin() {
     const url = 'http://127.0.0.1:8000/api/github-login'
     window.location.href = url;
+  }
+
+  localUser(data: any) {
+    localStorage.setItem('name', this.name);
+    localStorage.setItem('username', this.username);
+    localStorage.setItem('email', this.email);
   }
 }

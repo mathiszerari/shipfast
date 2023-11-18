@@ -17,7 +17,7 @@ export class AuthGithubService {
     return this.http.get<any[]>(url);
   }
 
-  githubUser(token: string): Observable<any[]> {
+  githubToken(token: string): Observable<any[]> {
     const url = `${this.apiUrl}/api/github-user?access_token=${token}`;
     return this.http.get<any[]>(url);
   }

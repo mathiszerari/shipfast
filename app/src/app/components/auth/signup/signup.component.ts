@@ -36,13 +36,10 @@ export class SignupComponent {
     if (this.signupForm.valid) {
       const formData: AuthCreateUser = this.signupForm.value;
       this.authService.createUser(formData).subscribe((data) => {
-        this.error = false;
-        localStorage.clear();
-        localStorage.setItem('name', data.name);
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('email', data.email);
-        localStorage.setItem('token', data.access_token);
-        this.navigateToProfile(data.username);
+        this.error = false
+        localStorage.clear()
+        this.localUser(data)
+        this.navigateToProfile(data.username)
       });
     } else {
       this.error = true;
@@ -60,5 +57,12 @@ export class SignupComponent {
   openGithubLogin() {
     const url = 'http://127.0.0.1:8000/api/github-login'
     window.location.href = url;
+  }
+
+  localUser(data: any) {
+    localStorage.setItem('name', data.name);
+    localStorage.setItem('username', data.username);
+    localStorage.setItem('email', data.email);
+    localStorage.setItem('token', data.access_token);
   }
 }

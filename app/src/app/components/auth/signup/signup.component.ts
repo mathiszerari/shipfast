@@ -53,7 +53,12 @@ export class SignupComponent {
     window.location.href = username;
   }
 
-  pathLogin() {
+  openLogin() {
     window.location.href = '/auth/login';
+  }
+
+  openGithubLogin() {
+    const url = 'http://127.0.0.1:8000/api/github-login'
+    window.location.href = url;
   }
 }

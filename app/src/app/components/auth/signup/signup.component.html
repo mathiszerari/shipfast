@@ -32,15 +32,15 @@
       <div class="mx-auto pb-6">
         <div class="flex flex-row gap-5 justify-center">
           <button class="cursor-pointer bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg">
-            <a><img src="../../../../assets/apple.png" alt="Apple logo" class="w-5 h-5"></a>
+            <img src="../../../../assets/apple.png" alt="Apple logo" class="w-5 h-5">
+          </button>
+  
+          <button (click)="openGithubLogin()" class="bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg">
+            <img src="../../../../assets/github.png" alt="GitHub logo" class="w-5 h-5">
           </button>
   
           <button class="bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg">
-            <a href="http://127.0.0.1:8000/api/github-login"><img src="../../../../assets/github.png" alt="GitHub logo" class="w-5 h-5"></a>
-          </button>
-  
-          <button class="bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg">
-            <a><img src="../../../../assets/google.png" alt="Google logo" class="w-5 h-5"></a>
+            <img src="../../../../assets/google.png" alt="Google logo" class="w-5 h-5">
           </button>
         </div>
   
@@ -63,7 +63,7 @@
           </div>
         </form>
 
-        <button (click)="pathLogin()" class="cursor-pointer group flex justify-center transition delay-150 duration-300 mt-10 w-full text-gray-400 bg-gray-950 border border-gray-800 focus:ring-4 focus:out border-10 w-478line-none font-medium hover:text-gray-300 rounded-lg text-sm py-2.5 text-center">
+        <button (click)="openLogin()" class="cursor-pointer group flex justify-center transition delay-150 duration-300 mt-10 w-full text-gray-400 bg-gray-950 border border-gray-800 focus:ring-4 focus:out border-10 w-478line-none font-medium hover:text-gray-300 rounded-lg text-sm py-2.5 text-center">
           <span class="transform ml-1">I already have an account</span> 
           <div class="transform group-hover:translate-x-1 ml-1 duration-300">→</div>
         </button>           

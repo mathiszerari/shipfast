@@ -60,7 +60,7 @@ export class LoginComponent {
     );
   }
 
-  pathSignup() {
+  openSignup() {
     window.location.href = '/auth/signup';
   }
 
@@ -68,5 +68,10 @@ export class LoginComponent {
     setTimeout(() => {
       window.location.href = this.username;
     }, 100);
+  }
+
+  openLogin() {
+    const url = 'http://127.0.0.1:8000/api/github-login'
+    window.location.href = url;
   }
 }

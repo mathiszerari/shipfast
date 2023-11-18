@@ -1,5 +1,6 @@
 export interface GithubUser {
   id: number;
+  username: string;
   github_username: string;
   name: string;
   email: string;
@@ -7,9 +8,4 @@ export interface GithubUser {
   location: string;
   blog: string;
   twitter_username: string;
-}
-
-export interface UsernameCreation {
-  github_username: string;
-  username: string;
 }

@@ -103,6 +103,7 @@ async def github_user(access_token: str):
 
 class GithubUser(BaseModel):
   id: int
+  username: str
   name: str
   github_username: str
   email: str
@@ -117,6 +118,7 @@ async def github_save_user(user_data: GithubUser):
         result = await db.users.insert_one(
             {
                 "id": user_data.id,
+                "username": user_data.username,
                 "name": user_data.name,
                 "github_username": user_data.github_username,
                 "email": user_data.email,
@@ -131,6 +133,7 @@ async def github_save_user(user_data: GithubUser):
             content={
                 "message": "User created successfully",
                 "id": user_data.id,
+                "username": user_data.username,
                 "name": user_data.name,
                 "github_username": user_data.github_username,
                 "email": user_data.email,
@@ -145,26 +148,9 @@ async def github_save_user(user_data: GithubUser):
             detail=f"Error creating user: {str(e)}"
         )
     
-class UsernameCreation(BaseModel):
-  github_username: str
-  username: str
+@app.get("/api/get_github_user_info/{github_username}")
+async def get_github_user_info_route(github_username: str):
+    if not github_username:
+        raise HTTPException(status_code=400, detail="Le champ 'github_username' est requis")
 
-from fastapi import HTTPException
-
-@app.post("/api/username-creation")
-async def shipfast_username(data: UsernameCreation):
-    user = await db.users.find_one({"github_username": data.github_username})
-
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    # Vérifier si le nouveau username existe déjà dans la base de données
-    existing_user = await db.users.find_one({"username": data.username})
-
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Username already exists")
-
-    # Mise à jour du champ username
-    await db.users.update_one({"github_username": data.github_username}, {"$set": {"username": data.username}})
-
-    return data
+    return await user_manager.get_github_user_info(github_username)

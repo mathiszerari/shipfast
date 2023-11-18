@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GithubUser, UsernameCreation } from '../models/github-user.model';
+import { GithubUser } from '../models/github-user.model';
+import { UserProfile } from '../models/user-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,8 @@ export class AuthGithubService {
     return this.http.post<GithubUser>(url, user);
   }
 
-  shipfastUsername(data: UsernameCreation): Observable<UsernameCreation> {
-    const url = `${this.apiUrl}/api/username-creation`;
-    return this.http.post<UsernameCreation>(url, data);
+  getGithubUserInfo(github_username: string): Observable<GithubUser> {
+    const url = `${this.apiUrl}/api/get_github_user_info/${github_username}`;
+    return this.http.get<GithubUser>(url);
   }
 }

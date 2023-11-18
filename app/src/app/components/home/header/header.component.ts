@@ -30,49 +30,7 @@ export class HeaderComponent {
       this.connected = true;
     }
 
-    const access_token = localStorage.getItem('token');
-
-    if (access_token) {
-      console.log("token");
-
-      if (localStorage.getItem('access_token')) {
-        this.authGithub.githubUser(access_token!).subscribe((data: any) => {
-          console.log(data);
-
-          localStorage.setItem('github_username', data.login);
-          localStorage.setItem('name', data.name);
-          localStorage.setItem('email', data.email);
-          localStorage.setItem('location', data.location);
-          localStorage.setItem('come_from', 'github');
-          this.connected = true;
-
-          const userData: GithubUser = {
-            id: data.id,
-            github_username: data.login,
-            name: data.name || '',
-            email: data.email || '',
-            come_from: 'github',
-            location: data.location || '',
-            blog: data.blog || '',
-            twitter_username: data.twitter_username || '',
-          };
-
-          if (localStorage.getItem('come_from') == 'github' && !localStorage.getItem('save_user')) {
-            localStorage.setItem('save_user', 'true');
-            this.authGithub.saveGithubUser(userData).subscribe(
-              (data: any) => {
-                console.log(data);
-                if (!data.username) {
-                  this.connected = false;
-                  localStorage.setItem('is_typing_username', 'true');
-                  window.location.href = '/username-creation';
-                }
-              }
-            )
-          }
-        })
-      }
-    } else {
+    if (!localStorage.getItem('token')) {
       this.route.queryParams.subscribe(params => {
         const code = params['code'];
         if (code) {
@@ -92,13 +50,10 @@ export class HeaderComponent {
       });
     }
 
-    if (localStorage.getItem('is_typing_username') == 'true' && window.location.pathname !== '/username-creation') {
-      localStorage.setItem('catch_him', 'true');
-      this.connected = false
-      window.location.href = '/username-creation';
+    if (localStorage.getItem('access_token') && !localStorage.getItem('username') && !localStorage.getItem('is_typing_username')) {
+      localStorage.setItem('is_typing_username', 'true')
+      console.log(localStorage);
     }
-    console.log(this.username);
-    
   }
 
   navigateToProfile(): void {

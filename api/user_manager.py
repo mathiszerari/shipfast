@@ -104,6 +104,21 @@ class UserManager:
         }
 
         return result_user
+    
+    async def get_github_user_info(self, github_username: str):
+        user = await self.db.users.find_one({"github_username": github_username})
+
+        if user is None:
+            raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+
+        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username"]
+        result_user = {
+            field: str(user.get(field)) if field == "_id" else user.get(field)
+            for field in fields_to_include
+        }
+
+        return result_user
+
 
     async def login(self, username_or_email: str, password: str):
         user = await self.db.users.find_one(

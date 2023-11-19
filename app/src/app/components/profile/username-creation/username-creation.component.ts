@@ -22,7 +22,7 @@ export class UsernameCreationComponent {
     private authGithub: AuthGithubService,
   ) {
     this.createUsernameForm = this.formBuilder.group({
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
     });
   }
 
@@ -33,7 +33,7 @@ export class UsernameCreationComponent {
       }
     }, 500)
       
-    if (localStorage.getItem('catch_him') == 'true') {
+    if (localStorage.getItem('warning') == 'true') {
       this.warning = "You need to complete this step before continuing your navigation 🔒"
     }
 
@@ -58,7 +58,7 @@ export class UsernameCreationComponent {
 
           const userData: GithubUser = {
             id: data.id,
-            username: this.createUsernameForm.value.username,
+            username: this.createUsernameForm.value.username.tolowerCase(),
             github_username: data.login,
             name: data.name || '',
             email: data.email || '',
@@ -71,7 +71,8 @@ export class UsernameCreationComponent {
           this.authGithub.saveGithubUser(userData).subscribe(
             (data: any) => {
               console.log(data);
-              localStorage.setItem('catch_him', '')
+              localStorage.setItem('catch_him', 'false');
+              localStorage.setItem('warning', 'false');
               window.location.href = this.username
             },
             (error: any) => {
@@ -86,7 +87,7 @@ export class UsernameCreationComponent {
   }
 
   localUser(data: any) {
-    localStorage.setItem('username', this.createUsernameForm.value.username);
+    localStorage.setItem('username', this.createUsernameForm.value.username.tolowerCase());
     localStorage.setItem('github_username', data.login);
     localStorage.setItem('name', data.name);
     localStorage.setItem('email', data.email);

@@ -22,7 +22,7 @@ export class SignupComponent {
   ) {
     this.signupForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
         Validators.required,
@@ -35,6 +35,7 @@ export class SignupComponent {
   onSubmit() {
     if (this.signupForm.valid) {
       const formData: AuthCreateUser = this.signupForm.value;
+      formData.username = formData.username.toLowerCase();
       this.authService.createUser(formData).subscribe((data) => {
         this.error = false
         localStorage.clear()
@@ -61,7 +62,7 @@ export class SignupComponent {
 
   localUser(data: any) {
     localStorage.setItem('name', data.name);
-    localStorage.setItem('username', data.username);
+    localStorage.setItem('username', data.username.toLowerCase());
     localStorage.setItem('email', data.email);
     localStorage.setItem('token', data.access_token);
   }

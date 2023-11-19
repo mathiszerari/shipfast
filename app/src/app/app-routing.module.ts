@@ -7,11 +7,16 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
 import { NoAuthGuard } from './guard/no-auth.guard';
 import { UsernameCreationComponent } from './components/profile/username-creation/username-creation.component';
+import { GithubPortalComponent } from './components/portal/github-portal/github-portal.component';
 
 const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+  },
+  {
+    path: 'github-portal',
+    component: GithubPortalComponent,
   },
   {
     path: 'auth',

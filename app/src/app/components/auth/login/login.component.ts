@@ -33,8 +33,8 @@ export class LoginComponent {
       const formData = this.loginForm.value;
       this.authService.loginUser(formData).subscribe((data: AuthReceiveLoginUser) => {
         localStorage.clear();
-        localStorage.setItem('username_or_email', data.username_or_email);
         this.username_or_email = data.username_or_email;
+        localStorage.setItem('username_or_email', data.username_or_email);
         localStorage.setItem('token', data.access_token);
         this.getUserInfo();
         this.navigateToProfile();
@@ -45,9 +45,6 @@ export class LoginComponent {
   getUserInfo() {
     this.authService.getUserInfo(this.username_or_email).subscribe(
       (data: any) => {
-        this.name = data.name;
-        this.username = data.username;
-        this.email = data.email;
         this.localUser(this);
       },
       (error) => {
@@ -75,5 +72,8 @@ export class LoginComponent {
     localStorage.setItem('name', this.name);
     localStorage.setItem('username', this.username);
     localStorage.setItem('email', this.email);
+    this.name = data.name;
+    this.username = data.username;
+    this.email = data.email;
   }
 }

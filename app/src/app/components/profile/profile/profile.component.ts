@@ -21,7 +21,6 @@ export class ProfileComponent {
   arobase: string = "@"
 
   constructor(
-    private route: ActivatedRoute,
     private authService: AuthService,
     private authGithub: AuthGithubService) { }
 
@@ -30,6 +29,8 @@ export class ProfileComponent {
       console.log(this.username);
 
       if (this.username != '') {
+        console.log("smash");
+        
         this.authService.getUserInfo(this.username).subscribe(
           (data: any) => {
             console.log(data);
@@ -42,6 +43,7 @@ export class ProfileComponent {
           }
         );
       } else {
+        console.log("pass");
         this.authGithub.githubToken(localStorage.getItem('token')!).subscribe((data: any) => {
           console.log(data);
           this.authGithub.getGithubUserInfo(data.login).subscribe((updated_data: any) => {
@@ -64,7 +66,6 @@ export class ProfileComponent {
 
   openGithub() {
     var httpurl = "https://github.com/";
-
     if (this.blog) {
       window.location.href = httpurl + this.github_username;
       console.log("Redirection vers le github_username:", httpurl + this.github_username);
@@ -73,7 +74,6 @@ export class ProfileComponent {
 
   openTwitter() {
     var httpurl = "https://twitter.com/";
-
     if (this.blog) {
       window.location.href = httpurl + this.twitter_username;
       console.log("Redirection vers le twitter_username:", httpurl + this.twitter_username);

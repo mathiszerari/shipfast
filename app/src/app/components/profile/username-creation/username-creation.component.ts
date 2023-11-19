@@ -20,7 +20,6 @@ export class UsernameCreationComponent {
   constructor(
     private formBuilder: FormBuilder,
     private authGithub: AuthGithubService,
-    private route: ActivatedRoute,
   ) {
     this.createUsernameForm = this.formBuilder.group({
       username: ['', [Validators.required]],
@@ -28,6 +27,12 @@ export class UsernameCreationComponent {
   }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      if (localStorage.getItem('username')) {
+        window.location.reload()
+      }
+    }, 500)
+      
     if (localStorage.getItem('catch_him') == 'true') {
       this.warning = "You need to complete this step before continuing your navigation 🔒"
     }
@@ -67,14 +72,11 @@ export class UsernameCreationComponent {
             (data: any) => {
               console.log(data);
               localStorage.setItem('catch_him', '')
-              localStorage.setItem('is_typing_username', '')
               window.location.href = this.username
             },
             (error: any) => {
               console.error(error);
-              // Ici, vous pouvez accéder à l'erreur détaillée
               const errorMessage = error.error?.detail || 'An error occurred';
-              // Traitez l'erreur comme vous le souhaitez (affichage à l'utilisateur, etc.)
               this.error = errorMessage;
             }
           )

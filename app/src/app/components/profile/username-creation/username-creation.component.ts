@@ -22,7 +22,7 @@ export class UsernameCreationComponent {
     private authGithub: AuthGithubService,
   ) {
     this.createUsernameForm = this.formBuilder.group({
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
     });
   }
 
@@ -58,7 +58,7 @@ export class UsernameCreationComponent {
 
           const userData: GithubUser = {
             id: data.id,
-            username: this.createUsernameForm.value.username,
+            username: this.createUsernameForm.value.username.tolowerCase(),
             github_username: data.login,
             name: data.name || '',
             email: data.email || '',
@@ -87,7 +87,7 @@ export class UsernameCreationComponent {
   }
 
   localUser(data: any) {
-    localStorage.setItem('username', this.createUsernameForm.value.username);
+    localStorage.setItem('username', this.createUsernameForm.value.username.tolowerCase());
     localStorage.setItem('github_username', data.login);
     localStorage.setItem('name', data.name);
     localStorage.setItem('email', data.email);

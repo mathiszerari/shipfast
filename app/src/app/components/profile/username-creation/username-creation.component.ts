@@ -33,7 +33,7 @@ export class UsernameCreationComponent {
       }
     }, 500)
       
-    if (localStorage.getItem('catch_him') == 'true') {
+    if (localStorage.getItem('warning') == 'true') {
       this.warning = "You need to complete this step before continuing your navigation 🔒"
     }
 
@@ -71,7 +71,8 @@ export class UsernameCreationComponent {
           this.authGithub.saveGithubUser(userData).subscribe(
             (data: any) => {
               console.log(data);
-              localStorage.setItem('catch_him', '')
+              localStorage.setItem('catch_him', 'false');
+              localStorage.setItem('warning', 'false');
               window.location.href = this.username
             },
             (error: any) => {

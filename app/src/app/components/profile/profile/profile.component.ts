@@ -21,28 +21,21 @@ export class ProfileComponent {
   arobase: string = "@"
 
   constructor(
-    private route: ActivatedRoute,
     private authService: AuthService,
     private authGithub: AuthGithubService) { }
 
   ngOnInit(): void {
     if ((localStorage.getItem('token') !== null && !localStorage.getItem('save_user')) || localStorage.getItem('username_craft') != '') {
       console.log(this.username);
-      
+
       if (this.username != '') {
+        console.log("smash");
+        
         this.authService.getUserInfo(this.username).subscribe(
           (data: any) => {
             console.log(data);
-            this.name = data.name;
-            this.username = data.username;
-            this.email = data.email;
-            this.come_from = data.come_from;
-            this.location = data.location;
-            this.blog = data.blog;
-            this.twitter_username = data.twitter_username;
-            this.github_username = data.github_username;
-            this.localUser('this');
-            localStorage.setItem('username_crafted', '');
+            this.setVariables(data);
+            this.localUser(this);
             console.log(data);
           },
           (error) => {
@@ -50,7 +43,8 @@ export class ProfileComponent {
           }
         );
       } else {
-        this.authGithub.githubUser(localStorage.getItem('token')!).subscribe((data: any) => {
+        console.log("pass");
+        this.authGithub.githubToken(localStorage.getItem('token')!).subscribe((data: any) => {
           console.log(data);
           this.authGithub.getGithubUserInfo(data.login).subscribe((updated_data: any) => {
             console.log(updated_data);
@@ -72,7 +66,6 @@ export class ProfileComponent {
 
   openGithub() {
     var httpurl = "https://github.com/";
-
     if (this.blog) {
       window.location.href = httpurl + this.github_username;
       console.log("Redirection vers le github_username:", httpurl + this.github_username);
@@ -81,7 +74,6 @@ export class ProfileComponent {
 
   openTwitter() {
     var httpurl = "https://twitter.com/";
-
     if (this.blog) {
       window.location.href = httpurl + this.twitter_username;
       console.log("Redirection vers le twitter_username:", httpurl + this.twitter_username);
@@ -102,6 +94,17 @@ export class ProfileComponent {
     localStorage.setItem('location', data.location);
     localStorage.setItem('blog', 'blog');
     localStorage.setItem('twitter_username', data.twitter_username);
-    console.log(localStorage); 
+    console.log(localStorage);
+  }
+
+  setVariables(data: any) {
+    this.name = data.name;
+    this.username = data.username;
+    this.email = data.email;
+    this.come_from = data.come_from;
+    this.location = data.location;
+    this.blog = data.blog;
+    this.twitter_username = data.twitter_username;
+    this.github_username = data.github_username;
   }
 }

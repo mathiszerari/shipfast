@@ -33,26 +33,19 @@ export class LoginComponent {
       const formData = this.loginForm.value;
       this.authService.loginUser(formData).subscribe((data: AuthReceiveLoginUser) => {
         localStorage.clear();
-        localStorage.setItem('username_or_email', data.username_or_email);
         this.username_or_email = data.username_or_email;
+        localStorage.setItem('username_or_email', data.username_or_email);
         localStorage.setItem('token', data.access_token);
         this.getUserInfo();
         this.navigateToProfile();
       });
-    } else {
-      console.log('The form is not valid');
-    }
+    } 
   }
 
   getUserInfo() {
     this.authService.getUserInfo(this.username_or_email).subscribe(
       (data: any) => {
-        this.name = data.name;
-        this.username = data.username;
-        this.email = data.email;
-        localStorage.setItem('name', this.name);
-        localStorage.setItem('username', this.username);
-        localStorage.setItem('email', this.email);
+        this.localUser(this);
       },
       (error) => {
         console.error('Error fetching user:', error);
@@ -73,5 +66,14 @@ export class LoginComponent {
   openLogin() {
     const url = 'http://127.0.0.1:8000/api/github-login'
     window.location.href = url;
+  }
+
+  localUser(data: any) {
+    localStorage.setItem('name', this.name);
+    localStorage.setItem('username', this.username);
+    localStorage.setItem('email', this.email);
+    this.name = data.name;
+    this.username = data.username;
+    this.email = data.email;
   }
 }

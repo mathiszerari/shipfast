@@ -26,6 +26,8 @@ export class HeaderComponent {
   ) { }
 
   ngOnInit(): void {
+    console.log('111111111111', '&&&&&&&&&&&&&&&&&&&&&&&&&');
+    
     if (this.username != '') {
       this.connected = true;
     }
@@ -40,19 +42,38 @@ export class HeaderComponent {
             console.log(data);
             console.log("done");
 
-            this.authGithub.githubUser(data).subscribe((data: any) => {
+            this.authGithub.githubToken(data).subscribe((data: any) => {
               console.log(data);
-              
               window.location.href = data.login;
             })
           });
         }
       });
     }
+    this.authGithub.githubToken(localStorage.getItem('token')!).subscribe((data: any) => {
+      console.log(data);
+      this.authGithub.getGithubUserInfo(data.login).subscribe((updated_data: any) => {
+        console.log(updated_data);
+        localStorage.setItem('username', updated_data.username);
+        
+        this.username = updated_data.username;
+        console.log(this.username);
+      })
+    })
 
-    if (localStorage.getItem('access_token') && !localStorage.getItem('username') && !localStorage.getItem('is_typing_username')) {
+    if (localStorage.getItem('access_token') && this.username == '' && !localStorage.getItem('is_typing_username')) {
       localStorage.setItem('is_typing_username', 'true')
-      console.log(localStorage);
+      console.log('&&&&&&&&&&&&&&&&&&&');
+      
+      if (localStorage.getItem('username')) {
+        localStorage.setItem('dont_pass', 'true')
+      }
+      
+      setTimeout(() => {
+        if (this.username == '' && !localStorage.getItem('dont_pass')) {
+          window.location.href = '/username-creation';
+        }
+      }, 200);
     }
   }
 

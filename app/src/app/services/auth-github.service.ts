@@ -17,7 +17,7 @@ export class AuthGithubService {
     return this.http.get<any[]>(url);
   }
 
-  githubUser(token: string): Observable<any[]> {
+  githubToken(token: string): Observable<any[]> {
     const url = `${this.apiUrl}/api/github-user?access_token=${token}`;
     return this.http.get<any[]>(url);
   }
@@ -28,7 +28,7 @@ export class AuthGithubService {
   }
 
   getGithubUserInfo(github_username: string): Observable<GithubUser> {
-    const url = `${this.apiUrl}/api/get_github_user_info/${github_username}`;
-    return this.http.get<GithubUser>(url);
+    const url = `${this.apiUrl}/api/get_github_user_info`;
+    return this.http.post<GithubUser>(url, { github_username: github_username });
   }
 }

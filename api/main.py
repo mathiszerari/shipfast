@@ -148,8 +148,12 @@ async def github_save_user(user_data: GithubUser):
             detail=f"Error creating user: {str(e)}"
         )
     
-@app.get("/api/get_github_user_info/{github_username}")
-async def get_github_user_info_route(github_username: str):
+class GithubUsername(BaseModel):
+  github_username: str
+@app.post("/api/get_github_user_info")
+async def get_github_user_info_route(data: GithubUsername):
+    github_username = data.github_username
+
     if not github_username:
         raise HTTPException(status_code=400, detail="Le champ 'github_username' est requis")
 

@@ -18,6 +18,8 @@ export class ProfileComponent {
   blog: string = localStorage.getItem('blog') || "";
   github_username: string = localStorage.getItem('github_username') || "";
   twitter_username: string = localStorage.getItem('twitter_username') || "";
+  creation_month: string = localStorage.getItem('creation_month') || "";
+  creation_year: string = localStorage.getItem('creation_year') || "";
   arobase: string = "@"
 
   constructor(
@@ -29,8 +31,6 @@ export class ProfileComponent {
       console.log(this.username);
 
       if (this.username != '') {
-        console.log("smash");
-        
         this.authService.getUserInfo(this.username).subscribe(
           (data: any) => {
             console.log(data);
@@ -43,15 +43,17 @@ export class ProfileComponent {
           }
         );
       } else {
-        console.log("pass");
-        this.authGithub.githubToken(localStorage.getItem('token')!).subscribe((data: any) => {
-          console.log(data);
-          this.authGithub.getGithubUserInfo(data.login).subscribe((updated_data: any) => {
-            console.log(updated_data);
-            this.localUser(updated_data)
-            window.location.reload();
+        if (localStorage.getItem('access_token')) {
+          this.authGithub.githubToken(localStorage.getItem('token')!).subscribe((data: any) => {
+            console.log(data);
+
+            this.authGithub.getGithubUserInfo(data.login).subscribe((updated_data: any) => {
+              console.log(updated_data);
+              this.localUser(updated_data)
+              window.location.reload();
+            })
           })
-        })
+        }
       }
     }
   }
@@ -94,6 +96,8 @@ export class ProfileComponent {
     localStorage.setItem('location', data.location);
     localStorage.setItem('blog', 'blog');
     localStorage.setItem('twitter_username', data.twitter_username);
+    localStorage.setItem('creation_month', 'creation_month');
+    localStorage.setItem('creation_year', data.creation_year);
     console.log(localStorage);
   }
 
@@ -106,5 +110,7 @@ export class ProfileComponent {
     this.blog = data.blog;
     this.twitter_username = data.twitter_username;
     this.github_username = data.github_username;
+    this.creation_month = data.creation_month;
+    this.creation_year = data.creation_year;
   }
 }

@@ -60,6 +60,10 @@ class UserManager:
 
             hashed_password = pwd_context.hash(password)
 
+            creation_date = datetime.datetime.utcnow()
+            creation_month = creation_date.strftime("%B")  # Obtenez le nom complet du mois
+            creation_year = creation_date.year
+
             result = await self.db.users.insert_one(
                 {
                     "name": name,
@@ -67,6 +71,8 @@ class UserManager:
                     "email": email,
                     "password": hashed_password,
                     "come_from": 'shipfast',
+                    "creation_month": creation_month,
+                    "creation_year": creation_year,
                 }
             )
 
@@ -97,7 +103,7 @@ class UserManager:
         if user is None:
             raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username"]
+        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "creation_month", "creation_year"]
         result_user = {
             field: str(user.get(field)) if field == "_id" else user.get(field)
             for field in fields_to_include
@@ -111,7 +117,7 @@ class UserManager:
         if user is None:
             raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username"]
+        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "creation_month", "creation_year"]
         result_user = {
             field: str(user.get(field)) if field == "_id" else user.get(field)
             for field in fields_to_include

@@ -20,6 +20,8 @@ db = mongo_client["shipfast"]
 github_client_id = os.getenv("github_client_id")
 github_client_secret = os.getenv("github_client_secret")
 
+creation_date = datetime.datetime.utcnow()
+
 user_manager = UserManager(db)
 
 origins = ["http://localhost:4200"]
@@ -73,6 +75,8 @@ class GithubUser(BaseModel):
 
 @app.post("/api/github-save-user")
 async def github_save_user(user_data: GithubUser):
+    creation_month = creation_date.strftime("%B")
+    creation_year = creation_date.year
     try:
         result = await db.users.insert_one(
             {
@@ -84,7 +88,9 @@ async def github_save_user(user_data: GithubUser):
                 "come_from": "github",
                 "location": user_data.location,
                 "blog": user_data.blog,
-                "twitter_username": user_data.twitter_username
+                "twitter_username": user_data.twitter_username,
+                "creation_month": creation_month,
+                "creation_year": creation_year,
             }
         )
 

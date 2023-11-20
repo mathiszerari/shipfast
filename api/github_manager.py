@@ -1,5 +1,7 @@
 import datetime
+import os
 from typing import Optional
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 import httpx
@@ -7,33 +9,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from starlette.responses import RedirectResponse
 from motor.motor_asyncio import AsyncIOMotorClient
+from user_manager import UserManager
 
-# code à appeler depuis le main
+load_dotenv()
 
 app = FastAPI()
-github_client_id = 'eff2af781a226c4fcd5a'
-github_client_secret = '124d9004aca6ea359b1f3838b32041e53116626b'
 
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = mongo_client["shipfast"]
+github_client_id = os.getenv("github_client_id")
+github_client_secret = os.getenv("github_client_secret")
+
+creation_date = datetime.datetime.utcnow()
+
+user_manager = UserManager(db)
 
 origins = ["http://localhost:4200"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-class GithubUser(BaseModel):
-  id: int
-  name: str
-  login: str
-  email: str
-  come_from: str
-  location: str
 
 @app.get("/api/github-login")
 async def github_login():
@@ -63,17 +62,35 @@ async def github_user(access_token: str):
     response = await client.get('https://api.github.com/user', headers=headers)
   return response.json()
 
+class GithubUser(BaseModel):
+  id: int
+  username: str
+  name: str
+  github_username: str
+  email: str
+  come_from: str
+  location: str
+  blog: str
+  twitter_username: str
+
 @app.post("/api/github-save-user")
 async def github_save_user(user_data: GithubUser):
+    creation_month = creation_date.strftime("%B")
+    creation_year = creation_date.year
     try:
         result = await db.users.insert_one(
             {
                 "id": user_data.id,
+                "username": user_data.username,
                 "name": user_data.name,
-                "username": user_data.login,
+                "github_username": user_data.github_username,
                 "email": user_data.email,
                 "come_from": "github",
-                "location": user_data.location
+                "location": user_data.location,
+                "blog": user_data.blog,
+                "twitter_username": user_data.twitter_username,
+                "creation_month": creation_month,
+                "creation_year": creation_year,
             }
         )
 
@@ -81,10 +98,13 @@ async def github_save_user(user_data: GithubUser):
             content={
                 "message": "User created successfully",
                 "id": user_data.id,
+                "username": user_data.username,
                 "name": user_data.name,
-                "username": user_data.login,
+                "github_username": user_data.github_username,
                 "email": user_data.email,
-                "location": user_data.location
+                "location": user_data.location,
+                "blog": user_data.blog,
+                "twitter_username": user_data.twitter_username
             }
         )
     except Exception as e:
@@ -92,3 +112,15 @@ async def github_save_user(user_data: GithubUser):
             status_code=500,
             detail=f"Error creating user: {str(e)}"
         )
+    
+class GithubUsername(BaseModel):
+  github_username: str
+
+@app.post("/api/get_github_user_info")
+async def get_github_user_info_route(data: GithubUsername):
+    github_username = data.github_username
+
+    if not github_username:
+        raise HTTPException(status_code=400, detail="Le champ 'github_username' est requis")
+
+    return await user_manager.get_github_user_info(github_username)

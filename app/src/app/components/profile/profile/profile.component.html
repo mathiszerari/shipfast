@@ -1,68 +1,9 @@
 <div class="mt-10 px-6">
-  <div class="flex h-16">
-    <div>
-      <img [src]="'https://api.dicebear.com/7.x/thumbs/svg?seed=' + username" alt="avatar" [alt]="username + '_pp'" class="w-16 h-16 rounded-full">
-    </div> 
-    <div class="ml-4">
-      <span class="text-base font-medium text-gray-200 mb-6 flex justify-center mt-2">{{name}}</span>
-      <span class="text-base font-normal text-gray-300 mb-6 flex -mt-4">{{arobase}}{{username}}</span>
-    </div>
-  </div>
-
-  <ng-container *ngIf="this.location">
-    <div class="mt-7 flex">
-      <div>
-        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" height="17" width="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 rounded-full">
-          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-          <circle cx="12" cy="10" r="3"/>
-        </svg>
-      </div>
-      <div class="ml-4">
-        <span class="text-sm font-light text-gray-400 flex justify-center">{{location}}</span>
-      </div>
-    </div>
+  <ng-container *ngIf="!edit">
+    <app-display-profile></app-display-profile>
   </ng-container>
-
-  <ng-container *ngIf="this.blog">
-    <div class="mt-3 flex">
-      <div>
-        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" height="17" width="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 rounded-full"><circle cx="12" cy="12" r="10"/>
-          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-          <path d="M2 12h20"/>
-        </svg>
-      </div>
-      <div class="ml-4">
-        <span (click)="openBlog()" class="text-sm cursor-pointer font-light text-gray-400 flex justify-center hover:text-gray-300">{{blog}}</span>
-      </div>
-    </div>
+  
+  <ng-container *ngIf="edit">
+    <app-edit-profile></app-edit-profile>
   </ng-container>
-
-  <ng-container *ngIf="this.twitter_username">
-    <div class="mt-3 flex">
-      <div>
-        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" height="17" width="17" viewBox="0 0 24 24" fill="none" stroke-width="2" class="text-gray-500">
-          <path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69c.88-.53 1.56-1.37 1.88-2.38c-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29c0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15c0 1.49.75 2.81 1.91 3.56c-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07a4.28 4.28 0 0 0 4 2.98a8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21C16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56c.84-.6 1.56-1.36 2.14-2.23Z"/></svg>
-      </div>
-      <div class="ml-4">
-        <span (click)="openTwitter()" class="text-sm cursor-pointer font-light text-gray-400 flex justify-center hover:text-gray-300">{{twitter_username}}</span>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="this.github_username">
-    <div class="mt-3 flex">
-      <div>
-        <svg height="20" width="20" viewBox="0 0 24 24" fill="none" stroke-width="2" class="text-gray-500" xmlns="http://www.w3.org/2000/svg">
-          <path fill="currentColor" d="M12.001 2c-5.525 0-10 4.475-10 10a9.994 9.994 0 0 0 6.837 9.488c.5.087.688-.213.688-.476c0-.237-.013-1.024-.013-1.862c-2.512.463-3.162-.612-3.362-1.175c-.113-.288-.6-1.175-1.025-1.413c-.35-.187-.85-.65-.013-.662c.788-.013 1.35.725 1.538 1.025c.9 1.512 2.337 1.087 2.912.825c.088-.65.35-1.087.638-1.337c-2.225-.25-4.55-1.113-4.55-4.938c0-1.088.387-1.987 1.025-2.688c-.1-.25-.45-1.275.1-2.65c0 0 .837-.262 2.75 1.026a9.28 9.28 0 0 1 2.5-.338c.85 0 1.7.112 2.5.337c1.913-1.3 2.75-1.024 2.75-1.024c.55 1.375.2 2.4.1 2.65c.637.7 1.025 1.587 1.025 2.687c0 3.838-2.337 4.688-4.563 4.938c.363.312.676.912.676 1.85c0 1.337-.013 2.412-.013 2.75c0 .262.188.574.688.474A10.016 10.016 0 0 0 22 12c0-5.525-4.475-10-10-10Z"/>
-        </svg>
-      </div>
-      <div class="ml-4">
-        <span (click)="openGithub()" class="text-sm cursor-pointer font-light text-gray-400 flex justify-center hover:text-gray-300">{{github_username}}</span>
-      </div>
-    </div>
-  </ng-container>
-
-  <div class="mt-4 w-full">
-    <button type="button" class="text-gray-900 w-full bg-gray-200 hover:bg-gray-100 focus:ring-4 ring-2 ring-gray-600 focus:outline-none font-semibold rounded-lg text-sm px-5 py-2 mb-2">Edit profile</button>
-  </div>
 </div>

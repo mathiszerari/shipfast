@@ -45,7 +45,7 @@ export class LoginComponent {
   getUserInfo() {
     this.authService.getUserInfo(this.username_or_email).subscribe(
       (data: any) => {
-        this.localUser(this);
+        this.localUser(data);
       },
       (error) => {
         console.error('Error fetching user:', error);
@@ -69,11 +69,11 @@ export class LoginComponent {
   }
 
   localUser(data: any) {
-    localStorage.setItem('name', this.name);
-    localStorage.setItem('username', this.username);
-    localStorage.setItem('email', this.email);
     this.name = data.name;
     this.username = data.username;
     this.email = data.email;
+    localStorage.setItem('name', this.name);
+    localStorage.setItem('username', this.username);
+    localStorage.setItem('email', this.email);
   }
 }

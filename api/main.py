@@ -4,13 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 import httpx
 from dotenv import load_dotenv
-from user_manager import UserManager, ClassUserCreate, oauth2_scheme
+from user_manager import ClassUserUpdate, UserManager, ClassUserCreate, oauth2_scheme
 from user_manager import UserManager
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
+from github_manager import app as github_manager
+
 load_dotenv()
 
 app = FastAPI()
+
+app.include_router(github_manager.router)
 
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = mongo_client["shipfast"]
@@ -19,9 +23,7 @@ github_client_secret = os.getenv("github_client_secret")
 
 user_manager = UserManager(db)
 
-origins = [
-    "http://localhost:4200",
-]
+origins = ["http://localhost:4200"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -58,10 +60,6 @@ async def create_users_handler(user: ClassUserCreate):
 async def login_route(login_data: LoginData):
     return await user_manager.login(login_data.username_or_email, login_data.password)
 
-@app.get("/protected")
-async def protected_route(token: str = Depends(oauth2_scheme)):
-    return {"message": "Bienvenue dans la zone protégée !"}
-
 @app.post("/api/get_user_info")
 async def get_user_info_route(data: dict):
     username_or_email = data.get("username_or_email")
@@ -71,90 +69,14 @@ async def get_user_info_route(data: dict):
 
     return await user_manager.get_user_info(username_or_email)
 
+@app.put("/api/update/{username}", response_model=ClassUserUpdate)
+async def update_user(username: str, update_data: ClassUserUpdate):
+    updated_user = await user_manager.update_user(username, update_data)
+    return updated_user
 
-# Github stuff
-@app.get("/api/github-login")
-async def github_login():
-    return RedirectResponse(f'https://github.com/login/oauth/authorize?client_id={github_client_id}', status_code=303)
 
-@app.get("/api/github-token")
-async def github_code(code: str):
-  params = {
-      'client_id': github_client_id,
-      'client_secret': github_client_secret,
-      'code': code
-  }
-  headers = {'Accept': 'application/json'}
-  async with httpx.AsyncClient() as client:
-      response = await client.post(
-          'https://github.com/login/oauth/access_token', params=params, headers=headers
-      )
-  response_json = response.json()
-  access_token = response_json.get('access_token')
 
-  return access_token
+if __name__ == "__main__":
+    import uvicorn
 
-@app.get("/api/github-user")
-async def github_user(access_token: str):
-  async with httpx.AsyncClient() as client:
-    headers = {'Accept': 'application/json','Authorization': f'Bearer {access_token}'}
-    response = await client.get('https://api.github.com/user', headers=headers)
-  return response.json()
-
-class GithubUser(BaseModel):
-  id: int
-  username: str
-  name: str
-  github_username: str
-  email: str
-  come_from: str
-  location: str
-  blog: str
-  twitter_username: str
-
-@app.post("/api/github-save-user")
-async def github_save_user(user_data: GithubUser):
-    try:
-        result = await db.users.insert_one(
-            {
-                "id": user_data.id,
-                "username": user_data.username,
-                "name": user_data.name,
-                "github_username": user_data.github_username,
-                "email": user_data.email,
-                "come_from": "github",
-                "location": user_data.location,
-                "blog": user_data.blog,
-                "twitter_username": user_data.twitter_username
-            }
-        )
-
-        return JSONResponse(
-            content={
-                "message": "User created successfully",
-                "id": user_data.id,
-                "username": user_data.username,
-                "name": user_data.name,
-                "github_username": user_data.github_username,
-                "email": user_data.email,
-                "location": user_data.location,
-                "blog": user_data.blog,
-                "twitter_username": user_data.twitter_username
-            }
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error creating user: {str(e)}"
-        )
-    
-class GithubUsername(BaseModel):
-  github_username: str
-@app.post("/api/get_github_user_info")
-async def get_github_user_info_route(data: GithubUsername):
-    github_username = data.github_username
-
-    if not github_username:
-        raise HTTPException(status_code=400, detail="Le champ 'github_username' est requis")
-
-    return await user_manager.get_github_user_info(github_username)
+    uvicorn.run(app, host="localhost", port=8000)

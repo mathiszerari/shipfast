@@ -8,9 +8,11 @@ import { HeaderComponent } from './components/home/header/header.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
+import { DisplayProfileComponent } from './components/profile/display-profile/display-profile.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
 import { UsernameCreationComponent } from './components/profile/username-creation/username-creation.component';
 import { GithubPortalComponent } from './components/portal/github-portal/github-portal.component';
+import { EditProfileComponent } from './components/profile/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -19,9 +21,11 @@ import { GithubPortalComponent } from './components/portal/github-portal/github-
     HomeComponent,
     LoginComponent,
     SignupComponent,
-    ProfileComponent,
     UsernameCreationComponent,
-    GithubPortalComponent
+    GithubPortalComponent,
+    ProfileComponent,
+    DisplayProfileComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,

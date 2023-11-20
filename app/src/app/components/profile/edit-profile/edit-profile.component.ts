@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { finalize } from 'rxjs';
 import { EditService } from 'src/app/services/edit.service';
 
 @Component({
@@ -27,9 +28,9 @@ export class EditProfileComponent {
     private formBuilder: FormBuilder,
     private editService: EditService,) {
     this.editProfile = this.formBuilder.group({
-      name: [this.name],
-      username: [this.username],
-      email: [this.email],
+      name: [this.name, [Validators.required]],
+      username: [this.username, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
+      email: [this.email, [Validators.required, Validators.email]],
       location: [this.location],
       blog: [this.blog],
       twitter_username: [this.twitter_username],
@@ -42,10 +43,26 @@ export class EditProfileComponent {
     const editForm = this.editProfile.value
     editForm.username = editForm.username.toLowerCase()
 
-    this.editService.updateUser(editForm).subscribe(
+    this.editService.updateUser(editForm).pipe(
+      finalize(() => {
+        window.location.href = editForm.username;
+        const token = localStorage.getItem('token');
+        if (localStorage.getItem('access_token')) {
+          const access_token = localStorage.getItem('access_token');
+          localStorage.clear();
+          localStorage.setItem('access_token', access_token!);
+        }
+        localStorage.clear();
+        localStorage.setItem('token', token!);
+        localStorage.setItem('username', editForm.username);
+      })
+    ).subscribe(
       (response: any) => {
         console.log('User updated successfully:', response);
       },
+      (error) => {
+        console.error('Error updating user:', error);
+      }
     );
   }
 

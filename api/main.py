@@ -60,10 +60,6 @@ async def create_users_handler(user: ClassUserCreate):
 async def login_route(login_data: LoginData):
     return await user_manager.login(login_data.username_or_email, login_data.password)
 
-@app.get("/protected")
-async def protected_route(token: str = Depends(oauth2_scheme)):
-    return {"message": "Bienvenue dans la zone protégée !"}
-
 @app.post("/api/get_user_info")
 async def get_user_info_route(data: dict):
     username_or_email = data.get("username_or_email")
@@ -77,6 +73,8 @@ async def get_user_info_route(data: dict):
 async def update_user(username: str, update_data: ClassUserUpdate):
     updated_user = await user_manager.update_user(username, update_data)
     return updated_user
+
+
 
 if __name__ == "__main__":
     import uvicorn

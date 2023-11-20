@@ -31,19 +31,22 @@ export class EditProfileComponent {
       username: [this.username],
       email: [this.email],
       location: [this.location],
-      website: [this.blog],
+      blog: [this.blog],
       twitter_username: [this.twitter_username],
       github_username: [this.github_username],
       about: [this.about],
     });
   }
 
-  ngOnInit(): void {
-    console.log(localStorage)
-  }
-
   onSubmit() {
-    console.log(this.editProfile.value);
+    const editForm = this.editProfile.value
+    editForm.username = editForm.username.toLowerCase()
+
+    this.editService.updateUser(editForm).subscribe(
+      (response: any) => {
+        console.log('User updated successfully:', response);
+      },
+    );
   }
 
   editSession() {

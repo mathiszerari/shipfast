@@ -1,10 +1,9 @@
 <div class="mt-10 px-6">
-    <!-- inverser les conditions des deux composants -->
-  <ng-container *ngIf="edit">
+  <ng-container *ngIf="!edit">
     <app-display-profile></app-display-profile>
   </ng-container>
   
-  <ng-container *ngIf="!edit">
+  <ng-container *ngIf="edit">
     <app-edit-profile></app-edit-profile>
   </ng-container>
 </div>

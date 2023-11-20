@@ -6,7 +6,7 @@ import { ProfileGuard } from './guard/profile.guard';
 import { LoginComponent } from './components/auth/login/login.component';
 import { DisplayProfileComponent } from './components/profile/display-profile/display-profile.component';
 import { NoAuthGuard } from './guard/no-auth.guard';
-import { UsernameCreationComponent } from './components/profile/username-creation/username-creation.component';
+import { UsernameCreationComponent } from './components/auth/username-creation/username-creation.component';
 import { GithubPortalComponent } from './components/portal/github-portal/github-portal.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
 

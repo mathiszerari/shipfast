@@ -19,6 +19,7 @@ export class DisplayProfileComponent {
   blog: string = localStorage.getItem('blog') || "";
   github_username: string = localStorage.getItem('github_username') || "";
   twitter_username: string = localStorage.getItem('twitter_username') || "";
+  about: string = localStorage.getItem('about') || "";
   creation_month: string = localStorage.getItem('creation_month') || "";
   creation_year: string = localStorage.getItem('creation_year') || "";
   arobase: string = "@"
@@ -100,13 +101,14 @@ export class DisplayProfileComponent {
 
   localUser(data: any) {
     localStorage.setItem('username', data.username);
-    localStorage.setItem('github_username', data.github_username);
     localStorage.setItem('name', data.name);
     localStorage.setItem('email', data.email);
     localStorage.setItem('come_from', 'github');
     localStorage.setItem('location', data.location);
     localStorage.setItem('blog', data.blog);
     localStorage.setItem('twitter_username', data.twitter_username);
+    localStorage.setItem('github_username', data.github_username);
+    localStorage.setItem('about', data.about);
     localStorage.setItem('creation_month', 'creation_month');
     localStorage.setItem('creation_year', data.creation_year);
     console.log(localStorage);
@@ -121,6 +123,7 @@ export class DisplayProfileComponent {
     this.blog = data.blog;
     this.twitter_username = data.twitter_username;
     this.github_username = data.github_username;
+    this.about = data.about;
     this.creation_month = data.creation_month;
     this.creation_year = data.creation_year;
   }

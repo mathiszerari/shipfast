@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 import httpx
 from dotenv import load_dotenv
-from user_manager import UserManager, ClassUserCreate, oauth2_scheme
+from user_manager import ClassUserUpdate, UserManager, ClassUserCreate, oauth2_scheme
 from user_manager import UserManager
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -73,6 +73,10 @@ async def get_user_info_route(data: dict):
 
     return await user_manager.get_user_info(username_or_email)
 
+@app.put("/api/update/{username}", response_model=ClassUserUpdate)
+async def update_user(username: str, update_data: ClassUserUpdate):
+    updated_user = await user_manager.update_user(username, update_data)
+    return updated_user
 
 if __name__ == "__main__":
     import uvicorn

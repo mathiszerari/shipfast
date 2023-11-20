@@ -1,4 +1,5 @@
 import datetime
+from bson import ObjectId
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from passlib.context import CryptContext
@@ -18,6 +19,16 @@ class ClassUserCreate(BaseModel):
   username: str
   email: EmailStr
   password: str
+
+class ClassUserUpdate(BaseModel):
+  name: str
+  username: str
+  email: str
+  location: str
+  blog: str
+  twitter_username: str
+  github_username: str
+  about: str
 
 class UserManager:
     def __init__(self, db):
@@ -103,7 +114,7 @@ class UserManager:
         if user is None:
             raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "creation_month", "creation_year"]
+        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about", "creation_month", "creation_year"]
         result_user = {
             field: str(user.get(field)) if field == "_id" else user.get(field)
             for field in fields_to_include
@@ -117,7 +128,7 @@ class UserManager:
         if user is None:
             raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "creation_month", "creation_year"]
+        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about", "creation_month", "creation_year"]
         result_user = {
             field: str(user.get(field)) if field == "_id" else user.get(field)
             for field in fields_to_include
@@ -139,3 +150,40 @@ class UserManager:
         access_token = self.create_jwt_token(token_data, expires)
 
         return {"username_or_email": username_or_email, "access_token": access_token}
+
+    async def update_user(self, username: str, update_data: ClassUserUpdate):
+        # Check if the user with the given username exists
+        existing_user = await self.db.users.find_one({"username": username})
+
+        if existing_user is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"User with username {username} not found",
+            )
+
+        # Prepare the update data
+        update_data_dict = update_data.dict(exclude_unset=True)  # Exclude unset values
+
+        # Update the user data
+        update_result = await self.db.users.update_one(
+            {"_id": ObjectId(existing_user["_id"])},
+            {"$set": update_data_dict},
+        )
+
+        if update_result.modified_count == 0:
+            raise HTTPException(
+                status_code=304,
+                detail="No fields updated. Provided data may be the same as existing data.",
+            )
+
+        # Fetch the updated user
+        updated_user = await self.db.users.find_one({"username": username})
+
+        # Prepare the response
+        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about"]
+        result_user = {
+            field: str(updated_user.get(field)) if field == "_id" else updated_user.get(field)
+            for field in fields_to_include
+        }
+
+        return result_user

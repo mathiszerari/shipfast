@@ -11,6 +11,9 @@ import { EditService } from 'src/app/services/edit.service';
 })
 export class EditProfileComponent {
   editProfile: FormGroup;
+  name_error: string = "";
+  username_error: string = "";
+  email_error: string = "";
 
   name: string = localStorage.getItem('name') || "";
   username: string = localStorage.getItem('username') || "";
@@ -40,31 +43,38 @@ export class EditProfileComponent {
   }
 
   onSubmit() {
-    const editForm = this.editProfile.value
-    editForm.username = editForm.username.toLowerCase()
-
-    this.editService.updateUser(editForm).pipe(
-      finalize(() => {
-        window.location.href = editForm.username;
-        const token = localStorage.getItem('token');
-        if (localStorage.getItem('access_token')) {
-          const access_token = localStorage.getItem('access_token');
+    if (this.editProfile.valid) {
+      const editForm = this.editProfile.value;
+      editForm.username = editForm.username.toLowerCase();
+  
+      this.editService.updateUser(editForm).pipe(
+        finalize(() => {
+          window.location.href = editForm.username;
+          const token = localStorage.getItem('token');
+          if (localStorage.getItem('access_token')) {
+            const access_token = localStorage.getItem('access_token');
+            localStorage.clear();
+            localStorage.setItem('access_token', access_token!);
+          }
           localStorage.clear();
-          localStorage.setItem('access_token', access_token!);
+          localStorage.setItem('token', token!);
+          localStorage.setItem('username', editForm.username);
+        })
+      ).subscribe(
+        (response: any) => {
+          console.log('User updated successfully:', response);
+        },
+        (error) => {
+          console.error('Error updating user:', error);
         }
-        localStorage.clear();
-        localStorage.setItem('token', token!);
-        localStorage.setItem('username', editForm.username);
-      })
-    ).subscribe(
-      (response: any) => {
-        console.log('User updated successfully:', response);
-      },
-      (error) => {
-        console.error('Error updating user:', error);
-      }
-    );
+      );
+    } else {
+      this.name_error = 'You must enter your name.';
+      this.username_error = "The username must only consist of letters.";
+      this.email_error = "You must respect email standards.";
+    }
   }
+  
 
   editSession() {
     this.editService.edit = !this.editService.edit

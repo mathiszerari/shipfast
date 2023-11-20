@@ -179,11 +179,21 @@ class UserManager:
         # Fetch the updated user
         updated_user = await self.db.users.find_one({"username": username})
 
+        if updated_user is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"User with username {username} not found",
+            )
+
         # Prepare the response
         fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about"]
         result_user = {
-            field: str(updated_user.get(field)) if field == "_id" else updated_user.get(field)
+            field: str(updated_user.get(field)) if field == "_id" and updated_user.get(field) else updated_user.get(field)
             for field in fields_to_include
         }
+
+        # Ajoutez des impressions pour déboguer
+        print("Updated User:", updated_user)
+        print("Result User:", result_user)
 
         return result_user

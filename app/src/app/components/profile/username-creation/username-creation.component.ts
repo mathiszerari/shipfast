@@ -32,7 +32,7 @@ export class UsernameCreationComponent {
         window.location.reload()
       }
     }, 500)
-      
+
     if (localStorage.getItem('warning') == 'true') {
       this.warning = "You need to complete this step before continuing your navigation 🔒"
     }
@@ -58,7 +58,7 @@ export class UsernameCreationComponent {
 
           const userData: GithubUser = {
             id: data.id,
-            username: this.createUsernameForm.value.username.tolowerCase(),
+            username: this.createUsernameForm.value.username.toLowerCase(),
             github_username: data.login,
             name: data.name || '',
             email: data.email || '',
@@ -87,7 +87,7 @@ export class UsernameCreationComponent {
   }
 
   localUser(data: any) {
-    localStorage.setItem('username', this.createUsernameForm.value.username.tolowerCase());
+    localStorage.setItem('username', this.createUsernameForm.value.username.toLowerCase());
     localStorage.setItem('github_username', data.login);
     localStorage.setItem('name', data.name);
     localStorage.setItem('email', data.email);

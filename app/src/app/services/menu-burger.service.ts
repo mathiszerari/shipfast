@@ -13,7 +13,5 @@ export class MenuBurgerService {
   toggleMobileMenu() {
     const currentValue = this.isMobileMenuOpenSource.value;
     this.isMobileMenuOpenSource.next(!currentValue);
-    console.log(this.isMobileMenuOpenSource.value);
-    
   }
 }

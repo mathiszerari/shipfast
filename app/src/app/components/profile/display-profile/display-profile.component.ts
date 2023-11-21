@@ -35,15 +35,11 @@ export class DisplayProfileComponent {
 
   ngOnInit(): void {
     if ((localStorage.getItem('token') !== null && !localStorage.getItem('save_user')) || localStorage.getItem('username_craft') != '') {
-      console.log(this.username);
-
       if (this.username != '') {
         this.authService.getUserInfo(this.username).subscribe(
           (data: any) => {
-            console.log(data);
             this.setVariables(data);
             this.localUser(this);
-            console.log(data);
           },
           (error) => {
             console.error('Error fetching user:', error);
@@ -52,10 +48,7 @@ export class DisplayProfileComponent {
       } else {
         if (localStorage.getItem('access_token')) {
           this.authGithub.githubToken(localStorage.getItem('token')!).subscribe((data: any) => {
-            console.log(data);
-
             this.authGithub.getGithubUserInfo(data.login).subscribe((updated_data: any) => {
-              console.log(updated_data);
               this.localUser(updated_data)
               window.location.reload();
             })
@@ -69,7 +62,6 @@ export class DisplayProfileComponent {
     var httpurl = "https://";
     if (this.blog) {
       window.location.href = httpurl + this.blog;
-      console.log("Redirection vers le blog:", httpurl + this.blog);
     }
   }
 
@@ -77,7 +69,6 @@ export class DisplayProfileComponent {
     var httpurl = "https://github.com/";
     if (this.blog) {
       window.location.href = httpurl + this.github_username;
-      console.log("Redirection vers le github_username:", httpurl + this.github_username);
     }
   }
 
@@ -85,7 +76,6 @@ export class DisplayProfileComponent {
     var httpurl = "https://twitter.com/";
     if (this.blog) {
       window.location.href = httpurl + this.twitter_username;
-      console.log("Redirection vers le twitter_username:", httpurl + this.twitter_username);
     }
   }
 
@@ -95,7 +85,6 @@ export class DisplayProfileComponent {
   }
 
   editSession() {
-    console.log(this.editService.edit);
     this.editService.edit = !this.editService.edit
   }
 
@@ -111,7 +100,6 @@ export class DisplayProfileComponent {
     localStorage.setItem('about', data.about);
     localStorage.setItem('creation_month', 'creation_month');
     localStorage.setItem('creation_year', data.creation_year);
-    console.log(localStorage);
   }
 
   setVariables(data: any) {

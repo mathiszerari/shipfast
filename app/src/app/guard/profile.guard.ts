@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthenticationService } from '../services/token.service';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class ProfileGuard implements CanActivate {
+
   constructor(private authService: AuthenticationService, private router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authService.isAuthenticated()) {
-      return true;
+      const usernameFromLocalStorage = localStorage.getItem('username');
+      const usernameFromUrl = route.paramMap.get('username');
+
+      if (usernameFromLocalStorage && usernameFromUrl && usernameFromLocalStorage === usernameFromUrl) {
+        return true;
+      } else {
+        this.router.navigate(['/home']);
+        return false;
+      }
     } else {
-      return this.router.parseUrl('/auth/login');
+      this.router.navigate(['/auth/login']);
+      return false;
     }
   }
 }

@@ -47,11 +47,8 @@ export class UsernameCreationComponent {
     const access_token = localStorage.getItem('token');
 
     if (access_token) {
-      console.log("token");
-
       if (localStorage.getItem('access_token')) {
         this.authGithub.githubToken(access_token!).subscribe((data: any) => {
-          console.log(data);
 
           this.localUser(data)
           this.connected = true;
@@ -70,7 +67,6 @@ export class UsernameCreationComponent {
 
           this.authGithub.saveGithubUser(userData).subscribe(
             (data: any) => {
-              console.log(data);
               localStorage.setItem('catch_him', 'false');
               localStorage.setItem('warning', 'false');
               window.location.href = this.username
@@ -95,6 +91,5 @@ export class UsernameCreationComponent {
     localStorage.setItem('location', data.location);
     localStorage.setItem('blog', 'blog');
     localStorage.setItem('twitter_username', data.twitter_username);
-    console.log(localStorage);
   }
 }

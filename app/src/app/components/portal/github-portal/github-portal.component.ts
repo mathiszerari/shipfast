@@ -26,13 +26,6 @@ export class GithubPortalComponent {
           this.authGithub.githubLogin(code).subscribe((data: any) => {
             localStorage.setItem('token', data);
             localStorage.setItem('access_token', data);
-            console.log(data);
-            console.log("done");
-
-            this.authGithub.githubToken(data).subscribe((data: any) => {
-              console.log(data);
-              // window.location.href = data.login;
-            })
           });
         }
       });

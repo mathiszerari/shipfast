@@ -1,62 +1,87 @@
-<div class="flex justify-around">
+<div class="lg:flex lg:justify-around hidden">
   <div class="px-8 my-4 cursor-pointer">
-    <!-- Put here your logo -->
     <a href="home">
       <img src="../../../../assets/newlogo.png" alt="Shipfast logo" class="w-10 h-10">
     </a>
   </div>
-  
-  <div class="flex align-middle my-6">
-    <!-- Put here your features / pages like the following examples -->
 
-    <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Store</span>
-
-    <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Developer</span>
-
-    <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Teams</span>
-
-    <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Pro</span>
-
-    <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Changelog</span>
-
-    <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Pricing</span>
-
-    <span class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">Blog</span>
+  <div class="hidden lg:flex lg:items-center my-6">
+    <span *ngFor="let link of navLinks" class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">
+      {{ link.text }}
+    </span>
   </div>
 
-  <div *ngIf="!connected || !username" class="flex mt-3.5">
+  <div *ngIf="!connected || !username" class="hidden lg:flex mt-3.5">
     <button class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
       <a href="auth/login">
         Log in
       </a>
     </button>
-    
+
     <button class="h-10 transition delay-150 duration-300 text-sm font-medium bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
       Suscribe
     </button>
   </div>
 
-  <div *ngIf="connected && username" class="mt-4">
+  <div *ngIf="connected && username" class="hidden lg:flex mt-4">
     <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white font-medium rounded-lg text-sm text-center inline-flex items-center m-0 p-0 h-10" type="button">
       <img [src]="pp + username" alt="avatar" [alt]="username + '_pp'" class="w-10 h-10 rounded-full">
       <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
       </svg>
     </button>
-    
+
     <!-- Dropdown menu -->
     <div id="dropdownHover" class="z-10 -mt-8 hidden divide-y divide-gray-100 absolute rounded-lg shadow w-40 bg-gray-900">
       <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownHoverButton">
-          <li>
-              <a href="/{{username}}" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">View Account</a>
-          </li>
-          <li>
-              <a href="/settings" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">Settings</a>
-          </li>
-          <li>
-              <a href="/auth/login" (click)="logout()" class="transition delay-150 duration-300  block px-4 py-2 text-red-600 hover:text-red-500">Log out</a>
-          </li>
+        <li>
+          <a href="/{{username}}" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">View Account</a>
+        </li>
+        <li>
+          <a href="/settings" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">Settings</a>
+        </li>
+        <li>
+          <a href="/auth/login" (click)="logout()" class="transition delay-150 duration-300  block px-4 py-2 text-red-600 hover:text-red-500">Log out</a>
+        </li>
       </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Menu burger (version mobile) -->
+<div class="lg:hidden flex justify-between items-center ">
+  <div class="px-10 my-6 cursor-pointer">
+    <a href="home">
+      <img src="../../../../assets/newlogo.png" alt="Shipfast logo" class="w-12 h-12">
+    </a>
+  </div>
+
+  <button (click)="toggleMobileMenu()" id="burgerButton" class="lg:hidden text-3xl px-4 pb-2 font-light text-white w-18">
+    &#9776;
+  </button>
+</div>
+
+<!-- Menu burger (version mobile) -->
+<div id="burgerMenu" class="lg:hidden my-2 hidden" [ngClass]="{'hidden': !isMobileMenuOpen}">
+  <div *ngFor="let link of navLinks" class="text-gray-200">
+    <a class="block ransition delay-150 duration-300 cursor-pointer text-lg ml-10 py-4 text-gray-400 hover:text-gray-300" [routerLink]="link.path">{{ link.text }}</a>
+  </div>
+
+  <div class="mx-auto divide-y mt-4 divide-gray-500 w-11/12">
+    <div></div>
+    <div></div>
+  </div>
+
+  <div>
+    <div *ngIf="!connected || !username" class="mt-3.5">
+      <a href="auth/login" class="block text-lg ml-10 py-2 text-gray-400 hover:text-gray-300">Log in</a>
+      <a href="#" class="block text-lg ml-10 py-2 text-gray-400 hover:text-gray-300">Subscribe</a>
+    </div>
+  
+    <div *ngIf="connected && username" class="mt-4 text-lg">
+      <a href="/{{username}}" class="block text-md ml-10 py-4 text-gray-400 hover:text-gray-300">View Account</a>
+      <a href="/settings" class="block text-md ml-10 py-4 text-gray-400 hover:text-gray-300">Settings</a>
+      <a href="/auth/login" (click)="logout()" class="block text-md ml-10 py-4 text-red-600 hover:text-red-500">Log out</a>
     </div>
   </div>
 </div>

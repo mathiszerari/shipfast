@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { GithubUser } from 'src/app/models/github-user.model';
 import { AuthGithubService } from 'src/app/services/auth-github.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { MenuBurgerService } from 'src/app/services/menu-burger.service';
 
 @Component({
   selector: 'app-header',
@@ -20,10 +22,34 @@ export class HeaderComponent {
   pp: string = "https://api.dicebear.com/7.x/thumbs/svg?seed="
   connected: boolean = false;
 
+  
+  isMobileMenuOpen: boolean = false;
+  private menuSubscription: Subscription;
+
   constructor(
     private authGithub: AuthGithubService,
     private route: ActivatedRoute,
-  ) { }
+    private menuService: MenuBurgerService
+  ) { 
+
+    this.menuSubscription = this.menuService.isMobileMenuOpen$.subscribe((isOpen) => {
+      this.isMobileMenuOpen = isOpen;
+    });
+  }
+
+  ngOnDestroy() {
+    this.menuSubscription.unsubscribe();
+  }
+
+  navLinks = [
+    { text: 'Store', path: '/store' },
+    { text: 'Developer', path: '/developer' },
+    { text: 'Teams', path: '/teams' },
+    { text: 'Pro', path: '/pro' },
+    { text: 'Changelog', path: '/changelog' },
+    { text: 'Pricing', path: '/pricing' },
+    { text: 'Blog', path: '/blog' },
+  ];
 
   ngOnInit(): void {
     if (this.username != '') {
@@ -34,6 +60,10 @@ export class HeaderComponent {
       localStorage.setItem('warning', 'true');
       window.location.href = '/username-creation';
     }
+  }
+
+  toggleMobileMenu() {
+    this.menuService.toggleMobileMenu();
   }
 
   navigateToProfile(): void {

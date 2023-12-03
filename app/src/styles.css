@@ -18,6 +18,14 @@
   width: 478px !important;
 }
 
+.blue {
+  color: #77a9ec;
+}
+
+.bg {
+  background-color: #131620;
+}
+
 .loader2 {
   width: 35px;
   aspect-ratio: 1;
@@ -29,6 +37,7 @@
   background-size: 40% 40%;
   animation:l11 1s infinite linear;
 }
+
 @keyframes l11 {
     25% {background-position:100% 0   ,0 100%,100% 100%}
     50% {background-position:100% 0   ,0 0   ,100% 100%}

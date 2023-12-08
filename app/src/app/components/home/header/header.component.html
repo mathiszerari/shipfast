@@ -49,22 +49,26 @@
 </div>
 
 <!-- Menu burger (version mobile) -->
-<div class="lg:hidden flex justify-between items-center ">
+<div class="lg:hidden flex justify-between items-center">
   <div class="px-10 my-6 cursor-pointer">
     <a href="home">
       <img src="../../../../assets/newlogo.png" alt="Shipfast logo" class="w-12 h-12">
     </a>
   </div>
 
-  <button (click)="toggleMobileMenu()" id="burgerButton" class="lg:hidden text-3xl px-4 pb-2 font-light text-white w-18">
-    &#9776;
+  <button *ngIf="!isMobileMenuOpen" (click)="toggleMobileMenu()" id="burgerButton" class="lg:hidden transition delay-150 duration-300 cursor-pointer text-3xl px-4 pb-2 font-light text-gray-100 hover: text-white w-18 transform transition-all duration-300 ease-in-out">
+    <svg width="24" height="24" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" d="M1.5 3a.5.5 0 0 0 0 1h12a.5.5 0 0 0 0-1h-12ZM1 7.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Zm0 4a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Z" clip-rule="evenodd"/></svg>
   </button>
+  
+  <button *ngIf="isMobileMenuOpen" (click)="toggleMobileMenu()" id="crossButton" class="lg:hidden transition delay-150 duration-300 cursor-pointer text-3xl px-4 pb-2 font-light hover:text-gray-100 text-gray-100 hover: text-white w-18 transform transition-all duration-300 ease-in-out">
+    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M20 20L4 4m16 0L4 20"/></svg>
+  </button>  
 </div>
 
 <!-- Menu burger (version mobile) -->
 <div id="burgerMenu" class="lg:hidden my-2 hidden" [ngClass]="{'hidden': !isMobileMenuOpen}">
   <div *ngFor="let link of navLinks" class="text-gray-200">
-    <a class="block ransition delay-150 duration-300 cursor-pointer text-lg ml-10 py-4 text-gray-400 hover:text-gray-300" [routerLink]="link.path">{{ link.text }}</a>
+    <a class="block transition delay-150 duration-300 cursor-pointer text-lg ml-10 py-4 text-gray-400 hover:text-gray-300" [routerLink]="link.path">{{ link.text }}</a>
   </div>
 
   <div class="mx-auto divide-y mt-4 divide-gray-500 w-11/12">

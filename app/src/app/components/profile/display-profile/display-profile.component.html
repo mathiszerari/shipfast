@@ -74,9 +74,9 @@
     <div class="divide-y divide-gray-700">
       <div></div>
   
-      <div class="flex flex-col">
-        <span class="text-md cursor-pointer font-light text-gray-400 py-4">{{about}}</span>
-        <span class="text-xs text-gray-400">Joined {{creation_month}} {{creation_year}}</span>
+      <div class="flex flex-col py-2">
+        <span *ngIf="about" class="text-md font-light text-gray-400">{{about}}</span>
+        <span class="text-xs text-gray-400 py-2">Joined {{creation_month}} {{creation_year}}</span>
       </div>
     </div>
   </div>

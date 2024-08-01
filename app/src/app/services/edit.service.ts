@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UpdateUser } from '../models/update-user.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditService {
-  private url = 'http://127.0.0.1:8000';
   private _edit = new BehaviorSubject<boolean>(false);
   edit$ = this._edit.asObservable();
 
@@ -23,7 +23,7 @@ export class EditService {
 
   updateUser(editData: UpdateUser): Observable<any> {
     const username = localStorage.getItem('username') || '';
-    const url = `${this.url}/api/update/${username}`;
+    const url = `${environment.apiUrl}/api/update/${username}`;
     return this.http.put(url, editData);
   }
 }

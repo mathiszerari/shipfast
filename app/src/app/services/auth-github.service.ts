@@ -31,4 +31,9 @@ export class AuthGithubService {
     const url = `${this.apiUrl}/api/get_github_user_info`;
     return this.http.post<GithubUser>(url, { github_username: github_username });
   }
+  
+  checkUsernameAvailability(username: string): Observable<{ message: string }> {
+    const url = `${this.apiUrl}/api/check_username`;
+    return this.http.get<{ message: string }>(url, { params: { username } });
+  }
 }

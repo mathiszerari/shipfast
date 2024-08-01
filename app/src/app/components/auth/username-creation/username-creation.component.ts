@@ -43,43 +43,50 @@ export class UsernameCreationComponent {
   }
 
   onSubmit() {
-    this.username = this.createUsernameForm.value.username
-    const access_token = localStorage.getItem('token');
+    const username = this.createUsernameForm.value.username;
+    this.authGithub.checkUsernameAvailability(username).subscribe((data: any) => {
+      console.log(data);
+      
+    })
 
-    if (access_token) {
-      if (localStorage.getItem('access_token')) {
-        this.authGithub.githubToken(access_token!).subscribe((data: any) => {
+    // return 
+    // this.username = this.createUsernameForm.value.username
+    // const access_token = localStorage.getItem('token');
 
-          this.localUser(data)
-          this.connected = true;
+    // if (access_token) {
+    //   if (localStorage.getItem('access_token')) {
+    //     this.authGithub.githubToken(access_token!).subscribe((data: any) => {
 
-          const userData: GithubUser = {
-            id: data.id,
-            username: this.createUsernameForm.value.username.toLowerCase(),
-            github_username: data.login,
-            name: data.name || '',
-            email: data.email || '',
-            come_from: 'github',
-            location: data.location || '',
-            blog: data.blog || '',
-            twitter_username: data.twitter_username || '',
-          };
+    //       this.localUser(data)
+    //       this.connected = true;
 
-          this.authGithub.saveGithubUser(userData).subscribe(
-            (data: any) => {
-              localStorage.setItem('catch_him', 'false');
-              localStorage.setItem('warning', 'false');
-              window.location.href = this.username
-            },
-            (error: any) => {
-              console.error(error);
-              const errorMessage = error.error?.detail || 'An error occurred';
-              this.error = errorMessage;
-            }
-          )
-        })
-      }
-    }
+    //       const userData: GithubUser = {
+    //         id: data.id,
+    //         username: this.createUsernameForm.value.username.toLowerCase(),
+    //         github_username: data.login,
+    //         name: data.name || '',
+    //         email: data.email || '',
+    //         come_from: 'github',
+    //         location: data.location || '',
+    //         blog: data.blog || '',
+    //         twitter_username: data.twitter_username || '',
+    //       };
+
+    //       this.authGithub.saveGithubUser(userData).subscribe(
+    //         (data: any) => {
+    //           localStorage.setItem('catch_him', 'false');
+    //           localStorage.setItem('warning', 'false');
+    //           window.location.href = this.username
+    //         },
+    //         (error: any) => {
+    //           console.error(error);
+    //           const errorMessage = error.error?.detail || 'An error occurred';
+    //           this.error = errorMessage;
+    //         }
+    //       )
+    //     })
+    //   }
+    // }
   }
 
   localUser(data: any) {

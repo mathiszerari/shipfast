@@ -196,3 +196,12 @@ class UserManager:
         print("Result User:", result_user)
 
         return result_user
+    
+    async def is_username_taken(self, username: str) -> bool:
+        """
+        Check if the given username is already taken.
+        :param username: The username to check.
+        :return: True if the username is taken, False otherwise.
+        """
+        user = await self.db.users.find_one({"username": username})
+        return user is not None

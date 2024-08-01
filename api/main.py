@@ -72,7 +72,13 @@ async def update_user(username: str, update_data: ClassUserUpdate):
     updated_user = await user_manager.update_user(username, update_data)
     return updated_user
 
-
+@app.get("/api/check_username")
+async def check_username(username: str):
+    is_taken = await user_manager.is_username_taken(username)
+    if is_taken:
+        return {"message": "Username is already taken"}
+    else:
+        return {"message": "Username is available"}
 
 if __name__ == "__main__":
     import uvicorn

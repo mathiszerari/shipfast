@@ -11,18 +11,19 @@ import { EditService } from 'src/app/services/edit.service';
 })
 export class DisplayProfileComponent {
   edit: boolean | undefined
-  name: string = localStorage.getItem('name') || "";
-  username: string = localStorage.getItem('username') || "";
-  email: string = localStorage.getItem('email') || "";
-  come_from: string = localStorage.getItem('come_from') || "";
-  location: string = localStorage.getItem('location') || "";
-  blog: string = localStorage.getItem('blog') || "";
-  github_username: string = localStorage.getItem('github_username') || "";
-  twitter_username: string = localStorage.getItem('twitter_username') || "";
-  about: string = localStorage.getItem('about') || "";
-  creation_month: string = localStorage.getItem('creation_month') || "";
-  creation_year: string = localStorage.getItem('creation_year') || "";
+  name: string = localStorage.getItem('name') || ""
+  username: string = localStorage.getItem('username') || ""
+  email: string = localStorage.getItem('email') || ""
+  come_from: string = localStorage.getItem('come_from') || ""
+  location: string = localStorage.getItem('location') || ""
+  blog: string = localStorage.getItem('blog') || ""
+  github_username: string = localStorage.getItem('github_username') || ""
+  twitter_username: string = localStorage.getItem('twitter_username') || ""
+  about: string = localStorage.getItem('about') || ""
+  creation_month: string = localStorage.getItem('creation_month') || ""
+  creation_year: string = localStorage.getItem('creation_year') || ""
   arobase: string = "@"
+  loaded: boolean = false
 
   constructor(
     private authService: AuthService,
@@ -73,7 +74,7 @@ export class DisplayProfileComponent {
   }
 
   openTwitter() {
-    var httpurl = "https://twitter.com/";
+    var httpurl = "https://x.com/";
     if (this.blog) {
       window.location.href = httpurl + this.twitter_username;
     }
@@ -97,9 +98,10 @@ export class DisplayProfileComponent {
     localStorage.setItem('blog', data.blog);
     localStorage.setItem('twitter_username', data.twitter_username);
     localStorage.setItem('github_username', data.github_username);
-    localStorage.setItem('about', data.about);
     localStorage.setItem('creation_month', 'creation_month');
     localStorage.setItem('creation_year', data.creation_year);
+    if (data.about != 'about') localStorage.setItem('about', data.about);
+    this.loaded = true
   }
 
   setVariables(data: any) {

@@ -1,10 +1,8 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, RedirectResponse
-import httpx
 from dotenv import load_dotenv
-from user_manager import ClassUserUpdate, UserManager, ClassUserCreate, oauth2_scheme
+from user_manager import ClassUserUpdate, UserManager, ClassUserCreate
 from user_manager import UserManager
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient

@@ -70,7 +70,6 @@ export class UsernameCreationComponent {
           this.connected = true;
 
           const userData: GithubUser = {
-            id: data.id,
             username: this.createUsernameForm.value.username.toLowerCase(),
             github_username: data.login,
             name: data.name || '',

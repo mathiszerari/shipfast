@@ -24,38 +24,39 @@ export class GithubPortalComponent {
         const code = params['code'];
         if (code) {
           this.authGithub.githubLogin(code).subscribe((data: any) => {
+            console.log(data);
+            
             localStorage.setItem('token', data);
             localStorage.setItem('access_token', data);
+            
+            this.authGithub.githubToken(data).subscribe((tokenData: any) => {
+              console.log(tokenData);
+              
+              this.authGithub.getGithubUserInfo(tokenData.login).subscribe((userInfo: any) => {
+                console.log(userInfo);
+                console.log("on a trouvé son compte");
+                
+                if (!userInfo.username || userInfo.username == '') {
+                  localStorage.setItem('catch_him', 'true');
+                  console.log(localStorage);
+                  window.location.href = 'username-creation';
+                } else {
+                  window.location.href = userInfo.username;
+                  localStorage.setItem('username', userInfo.username);
+                  this.username = userInfo.username;
+                  console.log(this.username);
+                }
+              },
+              (error) => {
+                console.log("on l'a pas en base");
+                localStorage.setItem('catch_him', 'true');
+                console.log(localStorage);
+                window.location.href = 'username-creation';
+              });
+            });
           });
         }
       });
-      setTimeout(() => {
-        this.authGithub.githubToken(localStorage.getItem('token')!).subscribe((data: any) => {
-          console.log(data);
-          this.authGithub.getGithubUserInfo(data.login).subscribe((updated_data: any) => {
-            console.log(updated_data);
-
-            if (!updated_data.username || updated_data.username == '') {
-              localStorage.setItem('catch_him', 'true');
-              console.log(localStorage);
-              
-              window.location.href = 'username-creation';
-            } else {
-              window.location.href = updated_data.username
-            }
-
-            localStorage.setItem('username', updated_data.username);
-            
-            this.username = updated_data.username;
-            console.log(this.username);
-          },
-          (error) => {
-            localStorage.setItem('catch_him', 'true');
-            console.log(localStorage);
-            window.location.href = 'username-creation';
-          })
-        })
-      }, 500)
     }
   }
 

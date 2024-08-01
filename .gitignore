@@ -8,3 +8,5 @@ api/.env
 *.env
 *.jpg
 _redirects
+app/src/environments/environment.development.ts
+app/src/environments/environment.ts

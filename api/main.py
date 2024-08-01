@@ -1,10 +1,8 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, RedirectResponse
-import httpx
 from dotenv import load_dotenv
-from user_manager import ClassUserUpdate, UserManager, ClassUserCreate, oauth2_scheme
+from user_manager import ClassUserUpdate, UserManager, ClassUserCreate
 from user_manager import UserManager
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -16,7 +14,7 @@ app = FastAPI()
 
 app.include_router(github_manager.router)
 
-mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
+mongo_client = AsyncIOMotorClient(os.getenv("url"))
 db = mongo_client["shipfast"]
 github_client_id = os.getenv("github_client_id")
 github_client_secret = os.getenv("github_client_secret")
@@ -74,7 +72,13 @@ async def update_user(username: str, update_data: ClassUserUpdate):
     updated_user = await user_manager.update_user(username, update_data)
     return updated_user
 
-
+@app.get("/api/check_username")
+async def check_username(username: str):
+    is_taken = await user_manager.is_username_taken(username)
+    if is_taken:
+        return {"message": "Username is already taken"}
+    else:
+        return {"message": "Username is available"}
 
 if __name__ == "__main__":
     import uvicorn

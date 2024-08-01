@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthCreateUser } from 'src/app/models/create-user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-signup',
@@ -26,8 +27,8 @@ export class SignupComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
         Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/)
+        // Validators.minLength(8),
+        // Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/)
       ]]
     });
   }
@@ -56,7 +57,7 @@ export class SignupComponent {
   }
 
   openGithubLogin() {
-    const url = 'http://127.0.0.1:8000/api/github-login'
+    const url = `${environment.apiUrl}/api/github-login`
     window.location.href = url;
   }
 

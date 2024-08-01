@@ -11,11 +11,12 @@ import { AuthGithubService } from 'src/app/services/auth-github.service';
   ]
 })
 export class UsernameCreationComponent {
-  createUsernameForm: FormGroup;
+  createUsernameForm: FormGroup
   username: string = ""
   error!: string
   warning!: string
-  connected: boolean = false;
+  connected: boolean = false
+  loader: boolean = false
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,7 +44,22 @@ export class UsernameCreationComponent {
   }
 
   onSubmit() {
-    this.username = this.createUsernameForm.value.username
+    this.loader = true
+    const username = this.createUsernameForm.value.username;
+    this.authGithub.checkUsernameAvailability(username).subscribe((data: any) => {
+      console.log(data);
+      
+      if (data.message == "Username is already taken") {
+        this.error = data.message
+        this.loader = false
+      } else if (data.message == "Username is available") {
+        this.proceedWithUsernameCreation(username);
+      }
+    })
+  }
+
+  proceedWithUsernameCreation(username: string) {
+    this.username = username
     const access_token = localStorage.getItem('token');
 
     if (access_token) {

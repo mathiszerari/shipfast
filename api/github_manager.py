@@ -1,8 +1,7 @@
 import datetime
 import os
-from typing import Optional
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,7 +14,7 @@ load_dotenv()
 
 app = FastAPI()
 
-mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
+mongo_client = AsyncIOMotorClient(os.getenv("url"))
 db = mongo_client["shipfast"]
 github_client_id = os.getenv("github_client_id")
 github_client_secret = os.getenv("github_client_secret")

@@ -4,8 +4,7 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from passlib.context import CryptContext
 import jwt
-from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr
 from fastapi.security import OAuth2PasswordBearer
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -197,3 +196,12 @@ class UserManager:
         print("Result User:", result_user)
 
         return result_user
+    
+    async def is_username_taken(self, username: str) -> bool:
+        """
+        Check if the given username is already taken.
+        :param username: The username to check.
+        :return: True if the username is taken, False otherwise.
+        """
+        user = await self.db.users.find_one({"username": username})
+        return user is not None

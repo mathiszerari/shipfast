@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuthReceiveLoginUser } from 'src/app/models/login-user.model';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-login',
@@ -64,7 +64,7 @@ export class LoginComponent {
   }
 
   openLogin() {
-    const url = 'http://127.0.0.1:8000/api/github-login'
+    const url = `${environment.apiUrl}/api/github-login`
     window.location.href = url;
   }
 

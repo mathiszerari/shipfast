@@ -6,19 +6,19 @@
   </div>
 
   <div class="hidden lg:flex lg:items-center my-6">
-    <span *ngFor="let link of navLinks" class="transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">
+    <span *ngFor="let link of navLinks" class="hover:transition hover:delay-150 hover:duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 px-4 cursor-pointer">
       {{ link.text }}
     </span>
   </div>
 
   <div *ngIf="!connected || !username" class="hidden lg:flex mt-3.5">
-    <button class="h-10 transition delay-150 duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
+    <button class="h-10 hover:transition hover:delay-150 hover:duration-300 text-sm font-medium text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
       <a href="auth/login">
         Log in
       </a>
     </button>
 
-    <button class="h-10 transition delay-150 duration-300 text-sm font-medium bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
+    <button class="h-10 hover:transition hover:delay-150 hover:duration-300 text-sm font-medium bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-gray-300 py-2 px-4 hover:border-transparent rounded-lg">
       Suscribe
     </button>
   </div>
@@ -35,13 +35,13 @@
     <div id="dropdownHover" class="z-10 -mt-8 hidden divide-y divide-gray-100 absolute rounded-lg shadow w-40 bg-gray-900">
       <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownHoverButton">
         <li>
-          <a href="/{{username}}" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">View Account</a>
+          <a href="/{{username}}" class="hover:transition hover:delay-150 hover:duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">View Account</a>
         </li>
         <li>
-          <a href="/settings" class="transition delay-150 duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">Settings</a>
+          <a href="/settings" class="hover:transition hover:delay-150 hover:duration-300  block px-4 py-2 text-gray-400 hover:text-gray-300">Settings</a>
         </li>
         <li>
-          <a href="/auth/login" (click)="logout()" class="transition delay-150 duration-300  block px-4 py-2 text-red-600 hover:text-red-500">Log out</a>
+          <a href="/auth/login" (click)="logout()" class="hover:transition hover:delay-150 hover:duration-300  block px-4 py-2 text-red-600 hover:text-red-500">Log out</a>
         </li>
       </ul>
     </div>
@@ -56,11 +56,11 @@
     </a>
   </div>
 
-  <button *ngIf="!isMobileMenuOpen" (click)="toggleMobileMenu()" id="burgerButton" class="lg:hidden transition delay-150 duration-300 cursor-pointer text-3xl px-4 pb-2 font-light text-gray-100 hover: text-white w-18 transform transition-all duration-300 ease-in-out">
+  <button *ngIf="!isMobileMenuOpen" (click)="toggleMobileMenu()" id="burgerButton" class="lg:hidden hover:transition hover:delay-150 hover:duration-300 cursor-pointer text-3xl px-4 pb-2 font-light text-gray-100 hover: text-white w-18 transform transition-all duration-300 ease-in-out">
     <svg width="24" height="24" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" d="M1.5 3a.5.5 0 0 0 0 1h12a.5.5 0 0 0 0-1h-12ZM1 7.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Zm0 4a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Z" clip-rule="evenodd"/></svg>
   </button>
   
-  <button *ngIf="isMobileMenuOpen" (click)="toggleMobileMenu()" id="crossButton" class="lg:hidden transition delay-150 duration-300 cursor-pointer text-3xl px-4 pb-2 font-light hover:text-gray-100 text-gray-100 hover: text-white w-18 transform transition-all duration-300 ease-in-out">
+  <button *ngIf="isMobileMenuOpen" (click)="toggleMobileMenu()" id="crossButton" class="lg:hidden hover:transition hover:delay-150 hover:duration-300 cursor-pointer text-3xl px-4 pb-2 font-light hover:text-gray-100 text-gray-100 hover: text-white w-18 transform transition-all duration-300 ease-in-out">
     <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M20 20L4 4m16 0L4 20"/></svg>
   </button>  
 </div>
@@ -68,7 +68,7 @@
 <!-- Menu burger (version mobile) -->
 <div id="burgerMenu" class="lg:hidden my-2 hidden" [ngClass]="{'hidden': !isMobileMenuOpen}">
   <div *ngFor="let link of navLinks" class="text-gray-200">
-    <a class="block transition delay-150 duration-300 cursor-pointer text-lg ml-10 py-4 text-gray-400 hover:text-gray-300" [routerLink]="link.path">{{ link.text }}</a>
+    <a class="block hover:transition hover:delay-150 hover:duration-300 cursor-pointer text-lg ml-10 py-4 text-gray-400 hover:text-gray-300" [routerLink]="link.path">{{ link.text }}</a>
   </div>
 
   <div class="mx-auto divide-y mt-4 divide-gray-500 w-11/12">

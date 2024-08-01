@@ -16,7 +16,7 @@ app = FastAPI()
 
 app.include_router(github_manager.router)
 
-mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
+mongo_client = AsyncIOMotorClient(os.getenv("url"))
 db = mongo_client["shipfast"]
 github_client_id = os.getenv("github_client_id")
 github_client_secret = os.getenv("github_client_secret")

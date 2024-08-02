@@ -64,7 +64,6 @@ class UserManager:
 
             if existing_user:
                 raise HTTPException(
-                    status_code=400,
                     detail="Username or email already registered. Choose a different one.",
                 )
 
@@ -101,7 +100,7 @@ class UserManager:
             )
         except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=400,
                 detail=f"Error creating user: {str(e)}",
             )
 

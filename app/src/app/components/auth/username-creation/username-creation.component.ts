@@ -47,8 +47,6 @@ export class UsernameCreationComponent {
     this.loader = true
     const username = this.createUsernameForm.value.username;
     this.authGithub.checkUsernameAvailability(username).subscribe((data: any) => {
-      console.log(data);
-      
       if (data.message == "Username is already taken") {
         this.error = data.message
         this.loader = false

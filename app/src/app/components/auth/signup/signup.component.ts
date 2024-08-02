@@ -39,8 +39,6 @@ export class SignupComponent {
       const formData: AuthCreateUser = this.signupForm.value;
       formData.username = formData.username.toLowerCase();
       this.authService.createUser(formData).subscribe((data) => {
-        console.log(data);
-        
         this.error = false
         localStorage.clear()
         this.localUser(data)

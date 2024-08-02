@@ -62,7 +62,6 @@ async def github_user(access_token: str):
   return response.json()
 
 class GithubUser(BaseModel):
-  id: int
   username: str
   name: str
   github_username: str
@@ -79,7 +78,6 @@ async def github_save_user(user_data: GithubUser):
     try:
         result = await db.users.insert_one(
             {
-                "id": user_data.id,
                 "username": user_data.username,
                 "name": user_data.name,
                 "github_username": user_data.github_username,
@@ -96,7 +94,6 @@ async def github_save_user(user_data: GithubUser):
         return JSONResponse(
             content={
                 "message": "User created successfully",
-                "id": user_data.id,
                 "username": user_data.username,
                 "name": user_data.name,
                 "github_username": user_data.github_username,

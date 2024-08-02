@@ -64,7 +64,6 @@ class UserManager:
 
             if existing_user:
                 raise HTTPException(
-                    status_code=400,
                     detail="Username or email already registered. Choose a different one.",
                 )
 
@@ -101,7 +100,7 @@ class UserManager:
             )
         except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=400,
                 detail=f"Error creating user: {str(e)}",
             )
 
@@ -113,7 +112,7 @@ class UserManager:
         if user is None:
             raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about", "creation_month", "creation_year"]
+        fields_to_include = ["name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about", "creation_month", "creation_year"]
         result_user = {
             field: str(user.get(field)) if field == "_id" else user.get(field)
             for field in fields_to_include
@@ -127,7 +126,7 @@ class UserManager:
         if user is None:
             raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about", "creation_month", "creation_year"]
+        fields_to_include = ["name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about", "creation_month", "creation_year"]
         result_user = {
             field: str(user.get(field)) if field == "_id" else user.get(field)
             for field in fields_to_include
@@ -185,7 +184,7 @@ class UserManager:
             )
 
         # Prepare the response
-        fields_to_include = ["id", "name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about"]
+        fields_to_include = ["name", "username", "email", "come_from", "location", "blog", "twitter_username", "github_username", "about"]
         result_user = {
             field: str(updated_user.get(field)) if field == "_id" and updated_user.get(field) else updated_user.get(field)
             for field in fields_to_include

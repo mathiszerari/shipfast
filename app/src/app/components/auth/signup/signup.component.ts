@@ -16,6 +16,7 @@ export class SignupComponent {
   signupForm: FormGroup;
   error: boolean = false;
   formErrors: any = {};
+  texterror: string = "";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,6 +43,10 @@ export class SignupComponent {
         localStorage.clear()
         this.localUser(data)
         this.navigateToProfile(data.username)
+      } , (error) => {
+        console.error(error);
+        this.texterror = error.error.detail
+        this.error = true
       });
     } else {
       this.error = true;

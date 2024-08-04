@@ -82,10 +82,13 @@ async def update_user(username: str, update_data: ClassUserUpdate):
 
 @app.get("/api/check_username")
 async def check_username(username: str):
+    print(username)
     is_taken = await user_manager.is_username_taken(username)
     if is_taken:
+        print(username, "is taken")
         return {"message": "Username is already taken"}
     else:
+        print(username, "is available")
         return {"message": "Username is available"}
 
 

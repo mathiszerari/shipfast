@@ -49,7 +49,7 @@ async def create_users_handler(user: ClassUserCreate):
             user.name, user.username, user.email, user.password
         )
     except HTTPException as e:
-        raise HTTPException(status_code=400, detail="Username unavailable")
+        raise HTTPException(status_code=400, detail={str(e)})
     except Exception as e:
         raise HTTPException(
             status_code=400,

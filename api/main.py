@@ -94,7 +94,7 @@ async def check_username(username: str):
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"welcome": "Hello World"}
 
 
 if __name__ == "__main__":

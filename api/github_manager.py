@@ -23,7 +23,7 @@ creation_date = datetime.datetime.utcnow()
 
 user_manager = UserManager(db)
 
-origins = ["http://localhost:4200"]
+origins = ["https://ship-faster.netlify.app"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,43 +33,56 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/api/github-login")
 async def github_login():
-    return RedirectResponse(f'https://github.com/login/oauth/authorize?client_id={github_client_id}', status_code=303)
+    return RedirectResponse(
+        f"https://github.com/login/oauth/authorize?client_id={github_client_id}",
+        status_code=303,
+    )
+
 
 @app.get("/api/github-token")
 async def github_code(code: str):
-  params = {
-      'client_id': github_client_id,
-      'client_secret': github_client_secret,
-      'code': code
-  }
-  headers = {'Accept': 'application/json'}
-  async with httpx.AsyncClient() as client:
-      response = await client.post(
-          'https://github.com/login/oauth/access_token', params=params, headers=headers
-      )
-  response_json = response.json()
-  access_token = response_json.get('access_token')
+    params = {
+        "client_id": github_client_id,
+        "client_secret": github_client_secret,
+        "code": code,
+    }
+    headers = {"Accept": "application/json"}
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://github.com/login/oauth/access_token",
+            params=params,
+            headers=headers,
+        )
+    response_json = response.json()
+    access_token = response_json.get("access_token")
 
-  return access_token
+    return access_token
+
 
 @app.get("/api/github-user")
 async def github_user(access_token: str):
-  async with httpx.AsyncClient() as client:
-    headers = {'Accept': 'application/json','Authorization': f'Bearer {access_token}'}
-    response = await client.get('https://api.github.com/user', headers=headers)
-  return response.json()
+    async with httpx.AsyncClient() as client:
+        headers = {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {access_token}",
+        }
+        response = await client.get("https://api.github.com/user", headers=headers)
+    return response.json()
+
 
 class GithubUser(BaseModel):
-  username: str
-  name: str
-  github_username: str
-  email: str
-  come_from: str
-  location: str
-  blog: str
-  twitter_username: str
+    username: str
+    name: str
+    github_username: str
+    email: str
+    come_from: str
+    location: str
+    blog: str
+    twitter_username: str
+
 
 @app.post("/api/github-save-user")
 async def github_save_user(user_data: GithubUser):
@@ -100,23 +113,24 @@ async def github_save_user(user_data: GithubUser):
                 "email": user_data.email,
                 "location": user_data.location,
                 "blog": user_data.blog,
-                "twitter_username": user_data.twitter_username
+                "twitter_username": user_data.twitter_username,
             }
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error creating user: {str(e)}"
-        )
-    
+        raise HTTPException(status_code=500, detail=f"Error creating user: {str(e)}")
+
+
 class GithubUsername(BaseModel):
-  github_username: str
+    github_username: str
+
 
 @app.post("/api/get_github_user_info")
 async def get_github_user_info_route(data: GithubUsername):
     github_username = data.github_username
 
     if not github_username:
-        raise HTTPException(status_code=400, detail="Le champ 'github_username' est requis")
+        raise HTTPException(
+            status_code=400, detail="Le champ 'github_username' est requis"
+        )
 
     return await user_manager.get_github_user_info(github_username)

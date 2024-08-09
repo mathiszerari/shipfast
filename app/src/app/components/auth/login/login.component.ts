@@ -2,7 +2,14 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuthReceiveLoginUser } from 'src/app/models/login-user.model';
+// en local
+// en local
 import { environment } from 'src/environments/environment.development';
+
+// en prod
+// import { environment } from 'src/environments/environment';
+// en prod
+// import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',

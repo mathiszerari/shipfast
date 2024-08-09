@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GithubUser } from '../models/github-user.model';
+// en local
 import { environment } from 'src/environments/environment.development';
+
+// en prod
+// import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

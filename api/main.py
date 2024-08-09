@@ -8,6 +8,10 @@ from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from github_manager import app as github_manager
 
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from dotenv import load_dotenv
+
 load_dotenv()
 
 app = FastAPI()
@@ -94,6 +98,9 @@ async def check_username(username: str):
 
 @app.get("/")
 def read_root():
+    url = os.getenv("url")
+    # Create a new client and connect to the server
+    client = MongoClient(url, server_api=ServerApi('1'))
     try:
         client.admin.command('ping')
         print("Pinged your deployment. You successfully connected to MongoDB!")

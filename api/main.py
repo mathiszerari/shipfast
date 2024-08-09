@@ -94,6 +94,11 @@ async def check_username(username: str):
 
 @app.get("/")
 def read_root():
+    try:
+        client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!")
+    except Exception as e:
+        print(e)
     return {"welcome": {
                 "username": os.getenv("username")},
                 "password": os.getenv("password"),

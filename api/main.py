@@ -94,7 +94,14 @@ async def check_username(username: str):
 
 @app.get("/")
 def read_root():
-    return {"welcome": "Hello World"}
+    return {"welcome": {
+                "username": os.getenv("username")},
+                "password": os.getenv("password"),
+                "url": os.getenv("url"),
+                "db_name": os.getenv("db_name"),
+                "github_client_id": os.getenv("github_client_id"),
+                "github_client_secret": os.getenv("github_client_secret"),
+            }
 
 
 if __name__ == "__main__":

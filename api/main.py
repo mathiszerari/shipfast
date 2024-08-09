@@ -21,7 +21,11 @@ github_client_secret = os.getenv("github_client_secret")
 
 user_manager = UserManager(db)
 
+# en local
 origins = ["http://localhost:4200"]
+
+# en prod
+# origins = ["https://ship-faster.netlify.app"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,7 +48,7 @@ async def create_users_handler(user: ClassUserCreate):
     try:
         return await user_manager.signup(user.name, user.username, user.email, user.password)
     except HTTPException as e:
-        raise HTTPException(status_code=400, detail="Username unavailable")
+        raise HTTPException(status_code=400, detail={str(e)})
     except Exception as e:
         raise HTTPException(
             status_code=400,
@@ -76,6 +80,10 @@ async def check_username(username: str):
         return {"message": "Username is already taken"}
     else:
         return {"message": "Username is available"}
+    
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 if __name__ == "__main__":
     import uvicorn

@@ -23,7 +23,11 @@ creation_date = datetime.datetime.utcnow()
 
 user_manager = UserManager(db)
 
+# en local
 origins = ["http://localhost:4200"]
+
+# en prod
+# origins = ["https://ship-faster.netlify.app"]
 
 app.add_middleware(
     CORSMiddleware,

@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UpdateUser } from '../models/update-user.model';
 import { HttpClient } from '@angular/common/http';
-// en local
 import { environment } from 'src/environments/environment.development';
-
-// en prod
-// import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

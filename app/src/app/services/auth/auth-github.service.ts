@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GithubUser } from '../models/github-user.model';
+import { GithubUser } from '../../models/github-user.model';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({

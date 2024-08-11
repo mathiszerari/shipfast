@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthGithubService } from 'src/app/services/auth-github.service';
+import { AuthGithubService } from 'src/app/services/auth/auth-github.service';
 
 @Component({
   selector: 'app-github-portal',

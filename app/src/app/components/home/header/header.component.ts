@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { GithubUser } from 'src/app/models/github-user.model';
-import { AuthGithubService } from 'src/app/services/auth-github.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { Subscription } from 'rxjs';
 import { MenuBurgerService } from 'src/app/services/menu-burger.service';
 
 @Component({
@@ -27,8 +23,6 @@ export class HeaderComponent {
   private menuSubscription: Subscription;
 
   constructor(
-    private authGithub: AuthGithubService,
-    private route: ActivatedRoute,
     private menuService: MenuBurgerService
   ) { 
 

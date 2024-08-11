@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
 import { AuthReceiveLoginUser } from 'src/app/models/login-user.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { environment } from 'src/environments/environment.development';
 
 @Component({

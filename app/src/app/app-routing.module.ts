@@ -8,6 +8,7 @@ import { NoAuthGuard } from './guard/no-auth.guard';
 import { UsernameCreationComponent } from './components/auth/username-creation/username-creation.component';
 import { GithubPortalComponent } from './components/portal/github-portal/github-portal.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
+import { GooglePortalComponent } from './components/portal/google-portal/google-portal.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'github-portal',
     component: GithubPortalComponent,
+  },
+  {
+    path: 'google-portal',
+    component: GooglePortalComponent,
   },
   {
     path: 'auth',

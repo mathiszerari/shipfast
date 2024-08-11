@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthGithubService } from 'src/app/services/auth-github.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthGithubService } from 'src/app/services/auth/auth-github.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { EditService } from 'src/app/services/edit.service';
 
 @Component({

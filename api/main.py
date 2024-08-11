@@ -48,7 +48,7 @@ async def create_users_handler(user: ClassUserCreate):
     try:
         return await user_manager.signup(user.name, user.username, user.email, user.password)
     except HTTPException as e:
-        raise HTTPException(status_code=400, detail={str(e)})
+        raise HTTPException(status_code=400, detail="Username unavailable")
     except Exception as e:
         raise HTTPException(
             status_code=400,

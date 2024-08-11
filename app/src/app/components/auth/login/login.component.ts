@@ -63,8 +63,13 @@ export class LoginComponent {
     }, 100);
   }
 
-  openLogin() {
+  githubAuth() {
     const url = `${environment.apiUrl}/api/github-login`
+    window.location.href = url;
+  }
+
+  googleAuth() {
+    const url = `${environment.apiUrl}/api/google-login`
     window.location.href = url;
   }
 

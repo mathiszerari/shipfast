@@ -96,12 +96,10 @@ class GoogleManager:
 
         # Préparer les données utilisateur
         user_data = {
-            "username": user_info.get("email"),
             "name": user_info.get("name"),
             "email": user_info.get("email"),
-            "google_id": user_info.get("id"),
-            "picture": user_info.get("picture"),
-            "locale": user_info.get("locale")
+            "come_from": "google",
+            "verified_email": user_info.get("verified_email"),
         }
 
         # Enregistrer l'utilisateur dans la base de données

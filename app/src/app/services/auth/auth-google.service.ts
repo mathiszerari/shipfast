@@ -15,7 +15,7 @@ export class AuthGoogleService {
   }
 
   googleCallback(code: string): Observable<any> {
-    const url = `${environment.apiUrl}/api/google-callback?code=${code}`;
+    const url = `${environment.apiUrl}/api/google-portal?code=${code}`;
     return this.http.get<any>(url);
   }
 }

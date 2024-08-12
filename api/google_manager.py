@@ -39,6 +39,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def serialize_doc(doc):
     """Convert MongoDB document to serializable format"""
     if isinstance(doc, ObjectId):
@@ -48,6 +49,7 @@ def serialize_doc(doc):
     if isinstance(doc, list):
         return [serialize_doc(i) for i in doc]
     return doc
+
 
 class GoogleManager:
     def __init__(self, db):
@@ -74,21 +76,16 @@ class GoogleManager:
             result = await self.db.users.insert_one(user_data)
             logger.info("User created with ID: %s", result.inserted_id)
 
-            return JSONResponse(
-                content={"message": "Google user created successfully"}
-            )
+            return JSONResponse(content={"message": "Google user created successfully"})
         except Exception as e:
             logger.error("Error saving Google user: %s", str(e))
             raise HTTPException(
-                status_code=500,
-                detail=f"Error saving Google user: {str(e)}"
+                status_code=500, detail=f"Error saving Google user: {str(e)}"
             )
 
     async def google_user_info(self, access_token: str):
         user_info_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-        headers = {
-            "Authorization": f"Bearer {access_token}"
-        }
+        headers = {"Authorization": f"Bearer {access_token}"}
         async with httpx.AsyncClient() as client:
             user_info_response = await client.get(user_info_url, headers=headers)
 
@@ -107,8 +104,10 @@ class GoogleManager:
 
         return serialize_doc(user_data)
 
+
 # Initialisation de GoogleManager
 google_manager_instance = GoogleManager(db)
+
 
 @app.get("/api/google-login")
 async def google_login():
@@ -119,34 +118,37 @@ async def google_login():
         "redirect_uri": google_redirect_uri,
         "scope": "openid email profile",
         "access_type": "offline",
-        "prompt": "consent"
+        "prompt": "consent",
     }
     url = f"{google_auth_endpoint}?{'&'.join([f'{key}={value}' for key, value in params.items()])}"
     return RedirectResponse(url)
 
-@app.get("/api/google-callback")
-async def google_callback(request: Request):
-    code = request.query_params.get('code')
+
+@app.get("/api/google-portal")
+async def google_portal(request: Request):
+    code = request.query_params.get("code")
     token_url = "https://oauth2.googleapis.com/token"
-    
+
     token_data = {
         "code": code,
         "client_id": google_client_id,
         "client_secret": google_client_secret,
         "redirect_uri": google_redirect_uri,
-        "grant_type": "authorization_code"
+        "grant_type": "authorization_code",
     }
 
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
     async with httpx.AsyncClient() as client:
         token_response = await client.post(token_url, data=token_data, headers=headers)
-    
+
     token_response_json = token_response.json()
     access_token = token_response_json.get("access_token")
     id_token = token_response_json.get("id_token")
 
     if not access_token or not id_token:
-        raise HTTPException(status_code=400, detail="Failed to obtain access token from Google")
+        raise HTTPException(
+            status_code=400, detail="Failed to obtain access token from Google"
+        )
 
     user_data = await google_manager_instance.google_user_info(access_token)
 

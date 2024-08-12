@@ -26,18 +26,42 @@ export class GooglePortalComponent {
     });
   }
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      const code = params['code'];
-      if (code) {
-        this.authGoogle.googleCallback(code).subscribe(data => {
-          // Gérer la réponse et rediriger l'utilisateur vers la page d'accueil ou une autre page.
-          console.log('User info:', data);
-          // Par exemple, rediriger vers la page d'accueil après connexion.
-          this.router.navigate(['/home']);
-        });
-      }
-    });
+  ngOnInit(): void {
+    localStorage.setItem('come_from', 'google');
+
+    
+    if (!localStorage.getItem('token')) {
+      this.route.queryParams.subscribe(params => {
+        const code = params['code'];
+        console.log(code);
+        
+        if (code) {
+          this.authGoogle.googleCallback(code).subscribe((data: any) => {
+            console.log(data);
+            
+            // localStorage.setItem('token', data);
+            // localStorage.setItem('access_token', data);
+            
+            // this.authGithub.githubToken(data).subscribe((tokenData: any) => {
+            //   this.authGithub.getGithubUserInfo(tokenData.login).subscribe((userInfo: any) => {
+            //     if (!userInfo.username || userInfo.username == '') {
+            //       localStorage.setItem('catch_him', 'true');
+            //       window.location.href = 'username-creation';
+            //     } else {
+            //       window.location.href = userInfo.username;
+            //       localStorage.setItem('username', userInfo.username);
+            //       this.username = userInfo.username;
+            //     }
+            //   },
+            //   (error) => {
+            //     localStorage.setItem('catch_him', 'true');
+            //     window.location.href = 'username-creation';
+            //   });
+            // });
+          });
+        }
+      });
+    }
   }
 
 }

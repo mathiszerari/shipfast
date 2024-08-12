@@ -1,7 +1,6 @@
 import datetime
 import os
 import logging
-import jwt
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -96,17 +95,34 @@ class GoogleManager:
                 detail=f"Error saving Google user: {str(e)}"
             )
 
-    @app.get("/api/google-test")
     async def google_user_info(self, access_token: str):
+        # Vérifier si le token est toujours valide
+        token_info_url = f"https://oauth2.googleapis.com/tokeninfo?access_token={access_token}"
+        async with httpx.AsyncClient() as client:
+            token_info_response = await client.get(token_info_url)
+        
+        logger.info(f"Token info response status: {token_info_response.status_code}")
+        logger.info(f"Token info response body: {token_info_response.text}")
+        
+        if token_info_response.status_code != 200:
+            raise HTTPException(status_code=401, detail="Invalid or expired access token")
+
+        # Continuer à utiliser le jeton pour récupérer les informations de l'utilisateur
         user_info_url = "https://www.googleapis.com/oauth2/v1/userinfo"
         headers = {
             "Authorization": f"Bearer {access_token}"
         }
         async with httpx.AsyncClient() as client:
             user_info_response = await client.get(user_info_url, headers=headers)
+        
+        logger.info(f"User info response status: {user_info_response.status_code}")
+        logger.info(f"User info response body: {user_info_response.text}")
 
+        if user_info_response.status_code != 200:
+            raise HTTPException(status_code=401, detail="Unauthorized request to Google API")
+        
         user_info = user_info_response.json()
-
+        
         # Préparer les données utilisateur
         user_data = {
             "name": user_info.get("name"),
@@ -121,9 +137,24 @@ class GoogleManager:
         return serialize_doc(user)
 
 
-
 # Initialisation de GoogleManager
 google_manager_instance = GoogleManager(db)
+
+@app.get("/api/google-token")
+async def google_token_handler(request: Request):
+    access_token = request.query_params.get("access_token")
+    if not access_token:
+        raise HTTPException(status_code=400, detail="Access token is required")
+
+    try:
+        user_data = await google_manager_instance.google_user_info(access_token)
+        return JSONResponse(content=user_data)
+    except HTTPException as e:
+        logger.error(f"Failed to handle token: {e.detail}")
+        raise e
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @app.get("/api/google-login")
@@ -144,6 +175,9 @@ async def google_login():
 @app.get("/api/google-portal")
 async def google_portal(request: Request):
     code = request.query_params.get("code")
+    if not code:
+        raise HTTPException(status_code=400, detail="Authorization code not provided")
+
     token_url = "https://oauth2.googleapis.com/token"
 
     token_data = {
@@ -159,14 +193,19 @@ async def google_portal(request: Request):
         token_response = await client.post(token_url, data=token_data, headers=headers)
 
     token_response_json = token_response.json()
+
+    if token_response.status_code != 200:
+        raise HTTPException(status_code=token_response.status_code, detail="Failed to obtain access token from Google")
+
     access_token = token_response_json.get("access_token")
     id_token = token_response_json.get("id_token")
 
     if not access_token or not id_token:
         raise HTTPException(
-            status_code=400, detail="Failed to obtain access token from Google"
+            status_code=400, detail="Failed to obtain valid tokens from Google"
         )
 
+    # Utilisez uniquement le jeton d'accès reçu pour valider et obtenir les infos utilisateur
     user_data = await google_manager_instance.google_user_info(access_token)
 
     # Retournez les informations utilisateur avec le token de session

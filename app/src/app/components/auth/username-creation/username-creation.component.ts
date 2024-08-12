@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GithubUser } from 'src/app/models/github-user.model';
 import { AuthGithubService } from 'src/app/services/auth/auth-github.service';
+import { AuthGoogleService } from 'src/app/services/auth/auth-google.service';
 
 @Component({
   selector: 'app-username-creation',
@@ -21,6 +22,7 @@ export class UsernameCreationComponent {
   constructor(
     private formBuilder: FormBuilder,
     private authGithub: AuthGithubService,
+    private authGoogle: AuthGoogleService
   ) {
     this.createUsernameForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
@@ -108,12 +110,34 @@ export class UsernameCreationComponent {
   }
 
   googleProceed(access_token: string) {
-    console.log('let us cook babe');
+    this.authGoogle.googleToken(access_token!).subscribe((data: any) => {
+  
+      this.localUser(data.user); // Enregistre les informations de l'utilisateur dans le localStorage
+      this.connected = true;
+  
+      const userData: GithubUser = {
+        username: this.createUsernameForm.value.username.toLowerCase(),
+        github_username: data.user.github_username, // ou un autre identifiant pertinent
+        name: data.user.name || '',
+        email: data.user.email || '',
+        come_from: 'google',
+        location: data.user.location || '',
+        blog: data.user.blog || '',
+        twitter_username: data.user.twitter_username || '',
+      };
+
+      console.log(data);
+    }, (error: any) => {
+      console.error(error);
+      this.failure = "Failed to retrieve user data from Google.";
+      this.loader = false;
+    });
   }
+  
 
   localUser(data: any) {
     localStorage.setItem('username', this.createUsernameForm.value.username.toLowerCase());
-    localStorage.setItem('github_username', data.login);
+    if (data.login) localStorage.setItem('github_username', data.login);
     localStorage.setItem('name', data.name);
     localStorage.setItem('email', data.email);
     localStorage.setItem('come_from', 'github');

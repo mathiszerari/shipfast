@@ -1,6 +1,7 @@
 import datetime
 import os
 import logging
+from typing import Optional
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -9,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 from user_manager import UserManager
+from pydantic import BaseModel
 
 # Configuration de logging
 logging.basicConfig(level=logging.INFO)
@@ -38,6 +40,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class GoogleUser(BaseModel):
+    username: Optional[str]
+    name: str
+    email: str
+    come_from: str
+    verified_email: str
+    creation_month: str
+    creation_year: str
 
 
 def serialize_doc(doc):
@@ -78,8 +89,8 @@ class GoogleManager:
             user_data["creation_year"] = creation_date.year
 
             # Insérez l'utilisateur dans la base de données
-            result = await self.db.users.insert_one(user_data)
-            logger.info("User created with ID: %s", result.inserted_id)
+            # result = await self.db.users.insert_one(user_data)
+            # logger.info("User created with ID: %s", result.inserted_id)
 
             # Générer un JWT pour le nouvel utilisateur
             token_data = {"sub": user_data["email"]}
@@ -140,22 +151,6 @@ class GoogleManager:
 # Initialisation de GoogleManager
 google_manager_instance = GoogleManager(db)
 
-@app.get("/api/google-token")
-async def google_token_handler(request: Request):
-    access_token = request.query_params.get("access_token")
-    if not access_token:
-        raise HTTPException(status_code=400, detail="Access token is required")
-
-    try:
-        user_data = await google_manager_instance.google_user_info(access_token)
-        return JSONResponse(content=user_data)
-    except HTTPException as e:
-        logger.error(f"Failed to handle token: {e.detail}")
-        raise e
-    except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
 
 @app.get("/api/google-login")
 async def google_login():
@@ -210,3 +205,24 @@ async def google_portal(request: Request):
 
     # Retournez les informations utilisateur avec le token de session
     return JSONResponse(content=user_data)
+
+@app.post("/api/google-save-user")
+async def save_user(user: GoogleUser):
+    print(user)
+    try:
+        # Convertir le modèle en dictionnaire
+        user_data = user.dict()
+        print(user_data)
+
+        # Insérer l'utilisateur dans la base de données
+        result = await db.users.insert_one(user_data)
+        logger.info("User created with ID: %s", result.inserted_id)
+        
+        # Retourner une réponse JSON avec l'ID de l'utilisateur inséré
+        return JSONResponse(content={"id": str(result.inserted_id)}, status_code=201)
+    except Exception as e:
+        logger.error("Error saving user: %s", str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error saving user: {str(e)}"
+        )

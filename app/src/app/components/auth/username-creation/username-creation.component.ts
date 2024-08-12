@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GithubUser } from 'src/app/models/github-user.model';
+import { GoogleUser } from 'src/app/models/google-user.model';
 import { AuthGithubService } from 'src/app/services/auth/auth-github.service';
 import { AuthGoogleService } from 'src/app/services/auth/auth-google.service';
 
@@ -63,13 +64,16 @@ export class UsernameCreationComponent {
     const access_token = localStorage.getItem('token');
     const origin = localStorage.getItem('come_from');
 
+    console.log(origin);
+    
+
     if (access_token) {
       if (origin == 'github') {
         this.githubProceed(access_token)
        }
 
       if (origin == 'google') { 
-        this.googleProceed(access_token)
+        this.googleProceed()
       }
     } else {
       this.failure = "An error occurred";
@@ -78,6 +82,7 @@ export class UsernameCreationComponent {
   }
 
   githubProceed(access_token: string) {
+    localStorage.setItem('username', this.username);
     this.authGithub.githubToken(access_token!).subscribe((data: any) => {
 
       this.localUser(data)
@@ -109,29 +114,34 @@ export class UsernameCreationComponent {
     })
   }
 
-  googleProceed(access_token: string) {
-    this.authGoogle.googleToken(access_token!).subscribe((data: any) => {
-  
-      this.localUser(data.user); // Enregistre les informations de l'utilisateur dans le localStorage
-      this.connected = true;
-  
-      const userData: GithubUser = {
-        username: this.createUsernameForm.value.username.toLowerCase(),
-        github_username: data.user.github_username, // ou un autre identifiant pertinent
-        name: data.user.name || '',
-        email: data.user.email || '',
-        come_from: 'google',
-        location: data.user.location || '',
-        blog: data.user.blog || '',
-        twitter_username: data.user.twitter_username || '',
-      };
+  googleProceed() {
+    localStorage.setItem('username', this.username);
+    console.log(localStorage);
 
-      console.log(data);
-    }, (error: any) => {
-      console.error(error);
-      this.failure = "Failed to retrieve user data from Google.";
-      this.loader = false;
-    });
+    const userData: GoogleUser = {
+      username: this.createUsernameForm.value.username.toLowerCase(),
+      name: localStorage.getItem('name') || '',
+      email: localStorage.getItem('email') || '',
+      come_from: localStorage.getItem('come_from') || '',
+      verified_email: localStorage.getItem('verified_email') || 'false',
+      creation_month: localStorage.getItem('creation_month') || '',
+      creation_year: localStorage.getItem('creation_year') || '',
+    };
+
+    console.log(userData);
+
+    this.authGoogle.saveGoogleUser(userData).subscribe(
+      (data: any) => {
+        localStorage.setItem('catch_him', 'false');
+        localStorage.setItem('warning', 'false');
+        window.location.href = this.username
+      },
+      (error: any) => {
+        console.error(error);
+        const errorMessage = error.error?.detail || 'An error occurred';
+        this.error = errorMessage;
+      }
+    )
   }
   
 

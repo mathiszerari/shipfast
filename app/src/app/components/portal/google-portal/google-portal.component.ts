@@ -15,7 +15,6 @@ export class GooglePortalComponent {
   constructor(
     private authGoogle: AuthGoogleService,
     private route: ActivatedRoute,
-    private router: Router
   ) { }
 
   onGoogleLogin() {
@@ -29,7 +28,6 @@ export class GooglePortalComponent {
   ngOnInit(): void {
     localStorage.setItem('come_from', 'google');
 
-    
     if (!localStorage.getItem('token')) {
       this.route.queryParams.subscribe(params => {
         const code = params['code'];
@@ -44,6 +42,17 @@ export class GooglePortalComponent {
 
             if (!data.user.username || data.user.username == '') {
               localStorage.setItem('catch_him', 'true');
+
+              console.log(data);
+              
+              localStorage.setItem('name', data.user.name);
+              localStorage.setItem('email', data.user.email);
+              localStorage.setItem('come_from', 'google');
+              localStorage.setItem('verified_email', data.user.verified_email);
+              localStorage.setItem('creation_month', data.user.creation_month);
+              localStorage.setItem('creation_year', data.user.creation_year);
+
+
               window.location.href = 'username-creation';
             } else {
               window.location.href = data.user.username;

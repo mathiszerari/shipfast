@@ -31,19 +31,14 @@ export class GooglePortalComponent {
     if (!localStorage.getItem('token')) {
       this.route.queryParams.subscribe(params => {
         const code = params['code'];
-        console.log(code);
         
         if (code) {
           this.authGoogle.googleCallback(code).subscribe((data: any) => {
-            console.log(data);
-
             localStorage.setItem('token', data.access_token);
             localStorage.setItem('access_token', data.access_token);
 
             if (!data.user.username || data.user.username == '') {
               localStorage.setItem('catch_him', 'true');
-
-              console.log(data);
               
               localStorage.setItem('name', data.user.name);
               localStorage.setItem('email', data.user.email);

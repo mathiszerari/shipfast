@@ -11,17 +11,17 @@ import { EditService } from 'src/app/services/edit.service';
 })
 export class DisplayProfileComponent {
   edit: boolean | undefined
-  name: string = localStorage.getItem('name') || ""
-  username: string = localStorage.getItem('username') || ""
-  email: string = localStorage.getItem('email') || ""
-  come_from: string = localStorage.getItem('come_from') || ""
-  location: string = localStorage.getItem('location') || ""
-  blog: string = localStorage.getItem('blog') || ""
-  github_username: string = localStorage.getItem('github_username') || ""
-  twitter_username: string = localStorage.getItem('twitter_username') || ""
-  about: string = localStorage.getItem('about') || ""
-  creation_month: string = localStorage.getItem('creation_month') || ""
-  creation_year: string = localStorage.getItem('creation_year') || ""
+  name: string = this.getLocalStorageItem('name') || ""
+  username: string = this.getLocalStorageItem('username') || ""
+  email: string = this.getLocalStorageItem('email') || ""
+  come_from: string = this.getLocalStorageItem('come_from') || ""
+  location: string = this.getLocalStorageItem('location') || ""
+  blog: string = this.getLocalStorageItem('blog') || ""
+  github_username: string = this.getLocalStorageItem('github_username') || ""
+  twitter_username: string = this.getLocalStorageItem('twitter_username') || ""
+  about: string = this.getLocalStorageItem('about') || ""
+  creation_month: string = this.getLocalStorageItem('creation_month') || ""
+  creation_year: string = this.getLocalStorageItem('creation_year') || ""
   arobase: string = "@"
   loaded: boolean = false
 
@@ -93,7 +93,7 @@ export class DisplayProfileComponent {
     localStorage.setItem('username', data.username);
     localStorage.setItem('name', data.name);
     localStorage.setItem('email', data.email);
-    localStorage.setItem('come_from', 'github');
+    localStorage.setItem('come_from', data.come_from);
     localStorage.setItem('location', data.location);
     localStorage.setItem('blog', data.blog);
     localStorage.setItem('twitter_username', data.twitter_username);
@@ -105,16 +105,22 @@ export class DisplayProfileComponent {
   }
 
   setVariables(data: any) {
-    this.name = data.name;
-    this.username = data.username;
-    this.email = data.email;
-    this.come_from = data.come_from;
-    this.location = data.location;
-    this.blog = data.blog;
-    this.twitter_username = data.twitter_username;
-    this.github_username = data.github_username;
-    this.about = data.about;
-    this.creation_month = data.creation_month;
-    this.creation_year = data.creation_year;
+    this.name = data.name || this.name;
+    this.username = data.username || this.username;
+    this.email = data.email || this.email;
+    this.come_from = data.come_from || this.come_from;
+    this.location = data.location || this.location;
+    this.blog = data.blog || this.blog;
+    this.twitter_username = data.twitter_username || this.twitter_username;
+    this.github_username = data.github_username || this.github_username;
+    this.about = data.about || this.about;
+    this.creation_month = data.creation_month || this.creation_month;
+    this.creation_year = data.creation_year || this.creation_year;
+  }
+
+  private getLocalStorageItem(key: string): string {
+    // Récupère l'élément de localStorage et retourne une valeur par défaut si non trouvé
+    const value = localStorage.getItem(key);
+    return value !== null ? value : "";
   }
 }

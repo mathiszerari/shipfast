@@ -64,9 +64,6 @@ export class UsernameCreationComponent {
     const access_token = localStorage.getItem('token');
     const origin = localStorage.getItem('come_from');
 
-    console.log(origin);
-    
-
     if (access_token) {
       if (origin == 'github') {
         this.githubProceed(access_token)
@@ -116,7 +113,6 @@ export class UsernameCreationComponent {
 
   googleProceed() {
     localStorage.setItem('username', this.username);
-    console.log(localStorage);
 
     const userData: GoogleUser = {
       username: this.createUsernameForm.value.username.toLowerCase(),
@@ -127,8 +123,6 @@ export class UsernameCreationComponent {
       creation_month: localStorage.getItem('creation_month') || '',
       creation_year: localStorage.getItem('creation_year') || '',
     };
-
-    console.log(userData);
 
     this.authGoogle.saveGoogleUser(userData).subscribe(
       (data: any) => {

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthGoogleService } from 'src/app/services/auth/auth-google.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-google-portal',

@@ -67,7 +67,7 @@ export class UsernameCreationComponent {
        }
 
       if (origin == 'google') { 
-        console.log('let us cook babe');
+        this.googleProceed(access_token)
       }
     } else {
       this.failure = "An error occurred";
@@ -105,6 +105,10 @@ export class UsernameCreationComponent {
         }
       )
     })
+  }
+
+  googleProceed(access_token: string) {
+    console.log('let us cook babe');
   }
 
   localUser(data: any) {

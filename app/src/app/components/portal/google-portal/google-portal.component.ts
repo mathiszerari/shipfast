@@ -39,30 +39,17 @@ export class GooglePortalComponent {
           this.authGoogle.googleCallback(code).subscribe((data: any) => {
             console.log(data);
 
-            if (!data.username || data.username == '') {
+            localStorage.setItem('token', data.access_token);
+            localStorage.setItem('access_token', data.access_token);
+
+            if (!data.user.username || data.user.username == '') {
               localStorage.setItem('catch_him', 'true');
               window.location.href = 'username-creation';
+            } else {
+              window.location.href = data.user.username;
+              localStorage.setItem('username', data.user.username);
+              this.username = data.user.username;
             }
-            
-            // localStorage.setItem('token', data);
-            // localStorage.setItem('access_token', data);
-            
-            // this.authGithub.githubToken(data).subscribe((tokenData: any) => {
-            //   this.authGithub.getGithubUserInfo(tokenData.login).subscribe((userInfo: any) => {
-            //     if (!userInfo.username || userInfo.username == '') {
-            //       localStorage.setItem('catch_him', 'true');
-            //       window.location.href = 'username-creation';
-            //     } else {
-            //       window.location.href = userInfo.username;
-            //       localStorage.setItem('username', userInfo.username);
-            //       this.username = userInfo.username;
-            //     }
-            //   },
-            //   (error) => {
-            //     localStorage.setItem('catch_him', 'true');
-            //     window.location.href = 'username-creation';
-            //   });
-            // });
           });
         }
       });

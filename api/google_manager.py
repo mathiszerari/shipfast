@@ -1,6 +1,7 @@
 import datetime
 import os
 import logging
+import jwt
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -50,23 +51,28 @@ def serialize_doc(doc):
         return [serialize_doc(i) for i in doc]
     return doc
 
-
 class GoogleManager:
     def __init__(self, db):
         self.db = db
-        self.user_manager = UserManager(db)
+        self.user_manager = UserManager(db)  # Initialise le gestionnaire utilisateur
 
-    async def save_google_user(self, user_data):
+    async def save_or_login_google_user(self, user_data):
         try:
             # Vérifiez si l'utilisateur existe déjà par email
             existing_user = await self.db.users.find_one({"email": user_data["email"]})
+            
             if existing_user:
                 logger.info("Email already registered: %s", user_data["email"])
-                raise HTTPException(
-                    status_code=400,
-                    detail="Email already registered.",
-                )
+                
+                # Générer un JWT pour l'utilisateur existant
+                token_data = {"sub": existing_user["email"]}
+                expires = datetime.timedelta(days=30)
+                access_token = self.user_manager.create_jwt_token(existing_user, expires)
+                
+                # Retournez les informations de l'utilisateur existant avec le token de session
+                return {"user": serialize_doc(existing_user), "access_token": access_token}
 
+            # Si l'utilisateur n'existe pas, créez un nouveau compte
             creation_date = datetime.datetime.utcnow()
             user_data["come_from"] = "google"
             user_data["creation_month"] = creation_date.strftime("%B")
@@ -76,16 +82,26 @@ class GoogleManager:
             result = await self.db.users.insert_one(user_data)
             logger.info("User created with ID: %s", result.inserted_id)
 
-            return JSONResponse(content={"message": "Google user created successfully"})
+            # Générer un JWT pour le nouvel utilisateur
+            token_data = {"sub": user_data["email"]}
+            expires = datetime.timedelta(days=30)
+            access_token = self.user_manager.create_jwt_token(token_data, expires)
+
+            # Retournez les informations du nouvel utilisateur avec le token de session
+            return {"user": user_data, "access_token": access_token}
         except Exception as e:
             logger.error("Error saving Google user: %s", str(e))
             raise HTTPException(
-                status_code=500, detail=f"Error saving Google user: {str(e)}"
+                status_code=500,
+                detail=f"Error saving Google user: {str(e)}"
             )
 
+    @app.get("/api/google-test")
     async def google_user_info(self, access_token: str):
         user_info_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {
+            "Authorization": f"Bearer {access_token}"
+        }
         async with httpx.AsyncClient() as client:
             user_info_response = await client.get(user_info_url, headers=headers)
 
@@ -99,10 +115,11 @@ class GoogleManager:
             "verified_email": user_info.get("verified_email"),
         }
 
-        # Enregistrer l'utilisateur dans la base de données
-        user_created = await self.save_google_user(user_data)
+        # Enregistrer ou connecter l'utilisateur
+        user = await self.save_or_login_google_user(user_data)
 
-        return serialize_doc(user_data)
+        return serialize_doc(user)
+
 
 
 # Initialisation de GoogleManager
@@ -152,4 +169,5 @@ async def google_portal(request: Request):
 
     user_data = await google_manager_instance.google_user_info(access_token)
 
+    # Retournez les informations utilisateur avec le token de session
     return JSONResponse(content=user_data)

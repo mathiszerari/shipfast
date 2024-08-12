@@ -38,6 +38,11 @@ export class GooglePortalComponent {
         if (code) {
           this.authGoogle.googleCallback(code).subscribe((data: any) => {
             console.log(data);
+
+            if (!data.username || data.username == '') {
+              localStorage.setItem('catch_him', 'true');
+              window.location.href = 'username-creation';
+            }
             
             // localStorage.setItem('token', data);
             // localStorage.setItem('access_token', data);

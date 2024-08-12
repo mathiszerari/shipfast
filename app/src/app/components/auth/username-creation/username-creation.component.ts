@@ -16,6 +16,7 @@ export class UsernameCreationComponent {
   warning!: string
   connected: boolean = false
   loader: boolean = false
+  failure!: string
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,40 +59,52 @@ export class UsernameCreationComponent {
   proceedWithUsernameCreation(username: string) {
     this.username = username
     const access_token = localStorage.getItem('token');
+    const origin = localStorage.getItem('come_from');
 
     if (access_token) {
-      if (localStorage.getItem('access_token')) {
-        this.authGithub.githubToken(access_token!).subscribe((data: any) => {
+      if (origin == 'github') {
+        this.githubProceed(access_token)
+       }
 
-          this.localUser(data)
-          this.connected = true;
-
-          const userData: GithubUser = {
-            username: this.createUsernameForm.value.username.toLowerCase(),
-            github_username: data.login,
-            name: data.name || '',
-            email: data.email || '',
-            come_from: 'github',
-            location: data.location || '',
-            blog: data.blog || '',
-            twitter_username: data.twitter_username || '',
-          };
-
-          this.authGithub.saveGithubUser(userData).subscribe(
-            (data: any) => {
-              localStorage.setItem('catch_him', 'false');
-              localStorage.setItem('warning', 'false');
-              window.location.href = this.username
-            },
-            (error: any) => {
-              console.error(error);
-              const errorMessage = error.error?.detail || 'An error occurred';
-              this.error = errorMessage;
-            }
-          )
-        })
+      if (origin == 'google') { 
+        console.log('let us cook babe');
       }
+    } else {
+      this.failure = "An error occurred";
+      this.loader = false
     }
+  }
+
+  githubProceed(access_token: string) {
+    this.authGithub.githubToken(access_token!).subscribe((data: any) => {
+
+      this.localUser(data)
+      this.connected = true;
+
+      const userData: GithubUser = {
+        username: this.createUsernameForm.value.username.toLowerCase(),
+        github_username: data.login,
+        name: data.name || '',
+        email: data.email || '',
+        come_from: 'github',
+        location: data.location || '',
+        blog: data.blog || '',
+        twitter_username: data.twitter_username || '',
+      };
+
+      this.authGithub.saveGithubUser(userData).subscribe(
+        (data: any) => {
+          localStorage.setItem('catch_him', 'false');
+          localStorage.setItem('warning', 'false');
+          window.location.href = this.username
+        },
+        (error: any) => {
+          console.error(error);
+          const errorMessage = error.error?.detail || 'An error occurred';
+          this.error = errorMessage;
+        }
+      )
+    })
   }
 
   localUser(data: any) {
@@ -101,7 +114,6 @@ export class UsernameCreationComponent {
     localStorage.setItem('email', data.email);
     localStorage.setItem('come_from', 'github');
     localStorage.setItem('location', data.location);
-    localStorage.setItem('blog', 'blog');
     localStorage.setItem('twitter_username', data.twitter_username);
   }
 }

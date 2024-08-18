@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home/home.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
 import { ProfileGuard } from './guard/profile.guard';
@@ -8,6 +8,7 @@ import { NoAuthGuard } from './guard/no-auth.guard';
 import { UsernameCreationComponent } from './components/auth/username-creation/username-creation.component';
 import { GithubPortalComponent } from './components/portal/github-portal/github-portal.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
+import { GooglePortalComponent } from './components/portal/google-portal/google-portal.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'github-portal',
     component: GithubPortalComponent,
+  },
+  {
+    path: 'google-portal',
+    component: GooglePortalComponent,
   },
   {
     path: 'auth',

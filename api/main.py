@@ -7,17 +7,22 @@ from user_manager import UserManager
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from github_manager import app as github_manager
+from google_manager import app as google_manager
 
 load_dotenv()
 
 app = FastAPI()
 
 app.include_router(github_manager.router)
+app.include_router(google_manager.router)
 
 mongo_client = AsyncIOMotorClient(os.getenv("url"))
 db = mongo_client["shipfast"]
 github_client_id = os.getenv("github_client_id")
 github_client_secret = os.getenv("github_client_secret")
+google_client_id = os.getenv("google_client_id")
+google_client_secret = os.getenv("google_client_secret")
+google_redirect_uri = os.getenv("google_redirect_uri")
 
 user_manager = UserManager(db)
 

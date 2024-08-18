@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { GithubUser } from 'src/app/models/github-user.model';
-import { AuthGithubService } from 'src/app/services/auth-github.service';
+import { GoogleUser } from 'src/app/models/google-user.model';
+import { AuthGithubService } from 'src/app/services/auth/auth-github.service';
+import { AuthGoogleService } from 'src/app/services/auth/auth-google.service';
 
 @Component({
   selector: 'app-username-creation',
@@ -17,10 +18,12 @@ export class UsernameCreationComponent {
   warning!: string
   connected: boolean = false
   loader: boolean = false
+  failure!: string
 
   constructor(
     private formBuilder: FormBuilder,
     private authGithub: AuthGithubService,
+    private authGoogle: AuthGoogleService
   ) {
     this.createUsernameForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
@@ -59,50 +62,90 @@ export class UsernameCreationComponent {
   proceedWithUsernameCreation(username: string) {
     this.username = username
     const access_token = localStorage.getItem('token');
+    const origin = localStorage.getItem('come_from');
 
     if (access_token) {
-      if (localStorage.getItem('access_token')) {
-        this.authGithub.githubToken(access_token!).subscribe((data: any) => {
+      if (origin == 'github') {
+        this.githubProceed(access_token)
+       }
 
-          this.localUser(data)
-          this.connected = true;
-
-          const userData: GithubUser = {
-            username: this.createUsernameForm.value.username.toLowerCase(),
-            github_username: data.login,
-            name: data.name || '',
-            email: data.email || '',
-            come_from: 'github',
-            location: data.location || '',
-            blog: data.blog || '',
-            twitter_username: data.twitter_username || '',
-          };
-
-          this.authGithub.saveGithubUser(userData).subscribe(
-            (data: any) => {
-              localStorage.setItem('catch_him', 'false');
-              localStorage.setItem('warning', 'false');
-              window.location.href = this.username
-            },
-            (error: any) => {
-              console.error(error);
-              const errorMessage = error.error?.detail || 'An error occurred';
-              this.error = errorMessage;
-            }
-          )
-        })
+      if (origin == 'google') { 
+        this.googleProceed()
       }
+    } else {
+      this.failure = "An error occurred";
+      this.loader = false
     }
   }
 
+  githubProceed(access_token: string) {
+    localStorage.setItem('username', this.username);
+    this.authGithub.githubToken(access_token!).subscribe((data: any) => {
+
+      this.localUser(data)
+      this.connected = true;
+
+      const userData: GithubUser = {
+        username: this.createUsernameForm.value.username.toLowerCase(),
+        github_username: data.login,
+        name: data.name || '',
+        email: data.email || '',
+        come_from: 'github',
+        location: data.location || '',
+        blog: data.blog || '',
+        twitter_username: data.twitter_username || '',
+      };
+
+      this.authGithub.saveGithubUser(userData).subscribe(
+        (data: any) => {
+          localStorage.setItem('catch_him', 'false');
+          localStorage.setItem('warning', 'false');
+          window.location.href = this.username
+        },
+        (error: any) => {
+          console.error(error);
+          const errorMessage = error.error?.detail || 'An error occurred';
+          this.error = errorMessage;
+        }
+      )
+    })
+  }
+
+  googleProceed() {
+    localStorage.setItem('username', this.username);
+
+    const userData: GoogleUser = {
+      username: this.createUsernameForm.value.username.toLowerCase(),
+      name: localStorage.getItem('name') || '',
+      email: localStorage.getItem('email') || '',
+      come_from: localStorage.getItem('come_from') || '',
+      verified_email: localStorage.getItem('verified_email') || 'false',
+      creation_month: localStorage.getItem('creation_month') || '',
+      creation_year: localStorage.getItem('creation_year') || '',
+    };
+
+    this.authGoogle.saveGoogleUser(userData).subscribe(
+      (data: any) => {
+        localStorage.setItem('catch_him', 'false');
+        localStorage.setItem('warning', 'false');
+        window.location.href = this.username
+      },
+      (error: any) => {
+        console.error(error);
+        const errorMessage = error.error?.detail || 'An error occurred';
+        this.error = errorMessage;
+      }
+    )
+  }
+  
+
   localUser(data: any) {
     localStorage.setItem('username', this.createUsernameForm.value.username.toLowerCase());
-    localStorage.setItem('github_username', data.login);
+    if (data.login) localStorage.setItem('github_username', data.login);
     localStorage.setItem('name', data.name);
     localStorage.setItem('email', data.email);
     localStorage.setItem('come_from', 'github');
     localStorage.setItem('location', data.location);
-    localStorage.setItem('blog', 'blog');
     localStorage.setItem('twitter_username', data.twitter_username);
   }
 }

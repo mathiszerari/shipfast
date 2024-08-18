@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthCreateUser } from '../models/create-user.model';
-import { AuthReceiveLoginUser, AuthSendLoginUser } from '../models/login-user.model';
-import { UserProfile } from '../models/user-info.model';
 import { environment } from 'src/environments/environment.development';
+import { AuthCreateUser } from 'src/app/models/create-user.model';
+import { AuthReceiveLoginUser, AuthSendLoginUser } from 'src/app/models/login-user.model';
+import { UserProfile } from 'src/app/models/user-info.model';
 
 @Injectable({
   providedIn: 'root'

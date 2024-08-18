@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
 import { AuthReceiveLoginUser } from 'src/app/models/login-user.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { environment } from 'src/environments/environment.development';
 
 @Component({
@@ -63,8 +63,13 @@ export class LoginComponent {
     }, 100);
   }
 
-  openLogin() {
+  githubAuth() {
     const url = `${environment.apiUrl}/api/github-login`
+    window.location.href = url;
+  }
+
+  googleAuth() {
+    const url = `${environment.apiUrl}/api/google-login`
     window.location.href = url;
   }
 

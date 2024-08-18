@@ -13,6 +13,7 @@ import { ProfileComponent } from './components/profile/profile/profile.component
 import { UsernameCreationComponent } from './components/auth/username-creation/username-creation.component';
 import { GithubPortalComponent } from './components/portal/github-portal/github-portal.component';
 import { EditProfileComponent } from './components/profile/edit-profile/edit-profile.component';
+import { GooglePortalComponent } from './components/portal/google-portal/google-portal.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { EditProfileComponent } from './components/profile/edit-profile/edit-pro
     GithubPortalComponent,
     ProfileComponent,
     DisplayProfileComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    GooglePortalComponent
   ],
   imports: [
     BrowserModule,
